@@ -31,7 +31,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Package"
+        DisplayName="Remote Process Manager"
         Description="Package"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
