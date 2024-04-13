@@ -14,6 +14,7 @@
     <Copyright>Copyright 2024 Internix Systems</Copyright>
     <Product>Remote Task Manager</Product>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+	<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
