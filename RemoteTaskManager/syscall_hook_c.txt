@@ -1,0 +1,15 @@
+﻿#include <linux/bpf.h>
+#include <linux/ptrace.h>
+
+SEC("syscall")
+int syscall_filter(struct __sk_buff *skb) {
+    char comm[16] = {};
+    bpf_get_current_comm(&comm, sizeof(comm));
+    u64 pid_tgid = bpf_get_current_pid_tgid();
+    u32 pid = pid_tgid >> 32;
+    u32 syscall_nr = bpf_get_syscall_nr();
+    if (syscall_nr == __NR_read || syscall_nr == __NR_write) {
+        bpf_trace_printk("Syscall: %d, PID: %d, Comm: %s\\n", syscall_nr, pid, comm);
+    }
+    return 0;
+}
