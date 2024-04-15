@@ -290,6 +290,10 @@
             toolStripStatusLabel1.Size = new Size(109, 20);
             toolStripStatusLabel1.Text = "Not Connected";
             // 
+            // bindingSource1
+            // 
+            bindingSource1.DataSource = typeof(SingleMachine);
+            // 
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(20, 20);

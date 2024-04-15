@@ -772,7 +772,7 @@ namespace RemoteTaskManager
             string apiKey = Properties.Settings.Default.openai_api_key;
 
             OpenAIAPI api = new OpenAIAPI(apiKey);
-           
+
             var chat = api.Chat.CreateConversation();
 
             /// give instruction as System
