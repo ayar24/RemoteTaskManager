@@ -9,7 +9,7 @@
   <Identity
     Name="InternixSystems.RemoteProcessManager"
     Publisher="CN=8075C70D-C666-4245-9299-8FFAD0CF83D6"
-    Version="1.0.20.0" />
+    Version="1.0.22.0" />
 
   <Properties>
     <DisplayName>Remote Process Manager</DisplayName>
