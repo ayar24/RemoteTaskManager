@@ -1,5 +1,6 @@
 name: Publish to MSStore
 runs-on: windows-latest
+on: push
 steps:
       # <previous steps to prepare workspace>
     name: Setup MSbuild
