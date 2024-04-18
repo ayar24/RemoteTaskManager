@@ -13,7 +13,6 @@ jobs:
         name: Package_1.0.27.0_AnyCPU_bundle.msixupload
         workflow: .NET Core Desktop
         # Use the @latest keyword to download the artifact from the latest run
-        workflow_ref: main
     - name: Try
       run: |
         Install-Module -Name StoreBroker -Force
