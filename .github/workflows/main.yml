@@ -1,7 +1,9 @@
 name: Publish to MSStore
 runs-on: windows-latest
 on: push
-steps:
+jobs:
+  build:
+    steps:
       # <previous steps to prepare workspace>
     name: Setup MSbuild
     uses: microsoft/setup-msbuild@v1.3.1
