@@ -70,12 +70,12 @@ Global
 		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|ARM64.ActiveCfg = Release|ARM64
 		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|ARM64.Build.0 = Release|ARM64
 		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|ARM64.Deploy.0 = Release|ARM64
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.ActiveCfg = Release|x64
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.Build.0 = Release|x64
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.Deploy.0 = Release|x64
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.ActiveCfg = Release|x86
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.Build.0 = Release|x86
-		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.Deploy.0 = Release|x86
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.Build.0 = Release|Any CPU
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x64.Deploy.0 = Release|Any CPU
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.Build.0 = Release|Any CPU
+		{CA7F4B05-2A47-4484-BA85-93564D343E15}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
