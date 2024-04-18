@@ -22,8 +22,8 @@ jobs:
         Set-StoreBrokerAuthentication -TenantId ${{ secrets.MS_TENANT_ID }} -Credential $Cred
         $appId = "9PNR1H0WT6RW"
         # Create submission package
-        New-StoreBrokerConfigFile -Path submission.json -AppId 9PNR1H0WT6RW
-        New-SubmissionPackage -ConfigPath .\submission.json -AppxPath .\Tonbrett.msix -OutPath out -OutName package
+        New-StoreBrokerConfigFile -Path .\submission.json -AppId 9PNR1H0WT6RW
+        New-SubmissionPackage -ConfigPath .\submission.json -AppxPath .\Package_1.0.27.0_AnyCPU_bundle.msixupload -OutPath out -OutName package
         # Create new submission
         $sub = New-ApplicationSubmission -AppId $appId -Force
         # Parse submission meta
