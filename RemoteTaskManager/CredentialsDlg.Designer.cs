@@ -37,11 +37,13 @@
             buttonCancel = new Button();
             buttonOK = new Button();
             checkBoxShowPassword = new CheckBox();
+            labelIP = new Label();
+            textBoxIP = new TextBox();
             SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(118, 30);
+            textBox1.Location = new Point(109, 60);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(212, 27);
             textBox1.TabIndex = 0;
@@ -49,7 +51,7 @@
             // labelUser
             // 
             labelUser.AutoSize = true;
-            labelUser.Location = new Point(21, 33);
+            labelUser.Location = new Point(12, 63);
             labelUser.Name = "labelUser";
             labelUser.Size = new Size(41, 20);
             labelUser.TabIndex = 1;
@@ -58,7 +60,7 @@
             // labelPassword
             // 
             labelPassword.AutoSize = true;
-            labelPassword.Location = new Point(21, 78);
+            labelPassword.Location = new Point(12, 105);
             labelPassword.Name = "labelPassword";
             labelPassword.Size = new Size(73, 20);
             labelPassword.TabIndex = 3;
@@ -66,7 +68,7 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(118, 75);
+            textBox2.Location = new Point(109, 102);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(212, 27);
             textBox2.TabIndex = 2;
@@ -75,7 +77,7 @@
             // labelPort
             // 
             labelPort.AutoSize = true;
-            labelPort.Location = new Point(21, 123);
+            labelPort.Location = new Point(12, 147);
             labelPort.Name = "labelPort";
             labelPort.Size = new Size(38, 20);
             labelPort.TabIndex = 5;
@@ -83,7 +85,7 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(118, 120);
+            textBox3.Location = new Point(109, 144);
             textBox3.MaxLength = 5;
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(60, 27);
@@ -92,7 +94,7 @@
             // buttonCancel
             // 
             buttonCancel.DialogResult = DialogResult.Cancel;
-            buttonCancel.Location = new Point(260, 182);
+            buttonCancel.Location = new Point(260, 194);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(94, 29);
             buttonCancel.TabIndex = 6;
@@ -103,7 +105,7 @@
             // buttonOK
             // 
             buttonOK.DialogResult = DialogResult.OK;
-            buttonOK.Location = new Point(160, 182);
+            buttonOK.Location = new Point(160, 194);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(94, 29);
             buttonOK.TabIndex = 7;
@@ -114,18 +116,37 @@
             // checkBoxShowPassword
             // 
             checkBoxShowPassword.AutoSize = true;
-            checkBoxShowPassword.Location = new Point(12, 182);
+            checkBoxShowPassword.Location = new Point(12, 194);
             checkBoxShowPassword.Name = "checkBoxShowPassword";
             checkBoxShowPassword.Size = new Size(132, 24);
             checkBoxShowPassword.TabIndex = 8;
             checkBoxShowPassword.Text = "Show Password";
             checkBoxShowPassword.UseVisualStyleBackColor = true;
+            checkBoxShowPassword.CheckedChanged += checkBoxShowPassword_CheckedChanged;
+            // 
+            // labelIP
+            // 
+            labelIP.AutoSize = true;
+            labelIP.Location = new Point(12, 21);
+            labelIP.Name = "labelIP";
+            labelIP.Size = new Size(24, 20);
+            labelIP.TabIndex = 10;
+            labelIP.Text = "IP:";
+            // 
+            // textBoxIP
+            // 
+            textBoxIP.Location = new Point(109, 18);
+            textBoxIP.Name = "textBoxIP";
+            textBoxIP.Size = new Size(97, 27);
+            textBoxIP.TabIndex = 9;
             // 
             // CredentialsDlg
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(366, 223);
+            ClientSize = new Size(366, 235);
+            Controls.Add(labelIP);
+            Controls.Add(textBoxIP);
             Controls.Add(checkBoxShowPassword);
             Controls.Add(buttonOK);
             Controls.Add(buttonCancel);
@@ -136,6 +157,7 @@
             Controls.Add(labelUser);
             Controls.Add(textBox1);
             Name = "CredentialsDlg";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Credentials";
             Load += CredentialsDlg_Load;
             ResumeLayout(false);
@@ -153,5 +175,7 @@
         private Button buttonCancel;
         private Button buttonOK;
         private CheckBox checkBoxShowPassword;
+        private Label labelIP;
+        private TextBox textBoxIP;
     }
 }

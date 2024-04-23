@@ -1,4 +1,4 @@
-//susing Microsoft.HyperV.Management;
+
 using System.Drawing.Design;
 using System.Management;
 using System.Net;
@@ -10,11 +10,11 @@ using static System.Formats.Asn1.AsnWriter;
 using System.Text.RegularExpressions;
 using OpenAI_API;
 using System.Text;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Linq;
 
 namespace RemoteTaskManager
 {
-
-
     public partial class RemoteTaskManager : Form
     {
         SingleMachine currentVM;
@@ -73,7 +73,16 @@ namespace RemoteTaskManager
 
         private void RemoteTaskManager_Load(object sender, EventArgs e)
         {
-            //PopulateListViewWithHyperVMachines();
+            chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart2.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart3.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart4.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            chart2.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            chart3.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+            chart4.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
+
+
             bindingSource1.Add(new SingleMachine());
             commandQue = new Queue<string>();
             hyperVMachines = new HypderVMachineList();
@@ -107,6 +116,67 @@ namespace RemoteTaskManager
                 // Refresh the data bindings on the UI thread
                 bindingSource1.ResetBindings(false);
             }));
+        }
+        private void PopulateCurrentTable(int currentTab)
+        {
+            if (currentTab == 1)
+            {
+                if (currentVM.RefreshProcessList(processListSort, processListSortOrder))
+                    this.Invoke(new Action(ProcessListViewForm));
+            }
+            else if (currentTab == 2)
+            {
+                if (currentVM.RefreshServicesList("name", true))
+                    this.Invoke(new Action(ServiceListViewForm));
+            }
+            else if (currentTab == 6)
+            {
+                int currentLog = toolStrip2.InvokeRequired ? (int)toolStrip2.Invoke(new Func<int>(() => toolStripComboBox1.SelectedIndex)) : toolStripComboBox1.SelectedIndex;
+                if (currentLog == -1)
+                {
+                    currentLog = 0;
+                }
+                if (currentVM.GetLogEntries(currentLog))
+                    this.Invoke(new Action(LogEntriesPopulate));
+            }
+            else if (currentTab == 5)
+            {
+                if (currentVM.RefreshUsersList("name", true))
+                    this.Invoke(new Action(UsersListViewForm));
+            }
+            else if (currentTab == 4)
+            {
+                if (currentVM.machineRPM.packages.Count == 0)
+                {
+                    // RPM is heavy, we want to handle this by adding
+                    // paging and buulk updates.
+                    if (currentVM.RefreshRPMList("name", true))
+                        this.Invoke(new Action(PackagesViewForm));
+                }
+            }
+            else if (currentTab == 9)
+            {
+                if (currentVM.RefreshCronList("name", true))
+                    this.Invoke(new Action(CronJobsViewForm));
+
+            }
+            else if (currentTab == 7)
+            {
+                if (currentVM.RefreshDiskList("name", true))
+                    this.Invoke(new Action(DisksViewForm));
+
+            }
+            else if (currentTab == 8)
+            {
+                if (currentVM.RefreshSELinux("name", true))
+                    this.Invoke(new Action(SecurityForm));
+
+            }
+            else if (currentTab == 3)
+            {
+                if (currentVM.RefreshNMonList("name", true))
+                    this.Invoke(new Action(NMonListViewForm));
+            }
         }
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -150,6 +220,13 @@ namespace RemoteTaskManager
                                 {
                                     if (currentVM.ConnectToSSH())
                                         refreshBindings();
+                                    else
+                                    {
+                                        currentVM = new SingleMachine();
+                                        bindingSource1.Clear();
+                                        MessageBox.Show("Failed to connect.");
+                                        refreshBindings();
+                                    }
                                 }
                                 else if (command.Contains("get_proc_maps"))
                                 {
@@ -157,7 +234,7 @@ namespace RemoteTaskManager
                                     currentVM.RefreshProcMaps(param);
 
                                     this.Invoke(new Action(() => ProcMapsListViewForm(param)));
-                                    //   ProcMapsListViewForm();
+
                                 }
                                 else if (command.Contains("kill_process"))
                                 {
@@ -181,34 +258,7 @@ namespace RemoteTaskManager
                     if (currentVM.state == "connected")
                     {
                         int currentTab = tabControl1.InvokeRequired ? (int)tabControl1.Invoke(new Func<int>(() => tabControl1.SelectedIndex)) : tabControl1.SelectedIndex;
-                        if (currentTab == 1)
-                        {
-                            if (currentVM.RefreshProcessList(processListSort, processListSortOrder))
-                                //ProcessListViewForm();
-                                this.Invoke(new Action(ProcessListViewForm));
-                        }
-                        else if (currentTab == 2)
-                        {
-                            if (currentVM.RefreshServicesList("name", true))
-                                //ProcessListViewForm();
-                                this.Invoke(new Action(ServiceListViewForm));
-                        }
-                        else if (currentTab == 6)
-                        {
-                            int currentLog = toolStrip2.InvokeRequired ? (int)toolStrip2.Invoke(new Func<int>(() => toolStripComboBox1.SelectedIndex)) : toolStripComboBox1.SelectedIndex;
-
-                            if (currentVM.GetLogEntries(currentLog))
-                                //ProcessListViewForm();
-                                this.Invoke(new Action(LogEntriesPopulate));
-                        }
-                        else if (currentTab == 5)
-                        {
-
-
-                            if (currentVM.RefreshUsersList("name", true))
-                                //ProcessListViewForm();
-                                this.Invoke(new Action(UsersListViewForm));
-                        }
+                        PopulateCurrentTable(currentTab);
                     }
                 }
                 Thread.Sleep(50);
@@ -216,24 +266,25 @@ namespace RemoteTaskManager
         }
         public void LogEntriesPopulate()
         {
-            //string selectedPid = "";
+
             int currentLog = toolStripComboBox1.SelectedIndex;
+            if (currentLog == -1)
+            {
+                toolStripComboBox1.SelectedIndex = 0;
+                currentLog = 0;
+            }
             int selectVPffset = 0;
             if (listView3.SelectedItems.Count > 0)
             {
-                //    selectedPid = listView3.SelectedItems[0].SubItems[0].Text;
 
             }
             if (listView3.TopItem != null)
-                selectVPffset = listView3.TopItem.Index;//.Count;
-                                                        //Point savedVerticalScrollPosition = listView1.AutoScrollOffset;// VerticalScroll.Value;
+                selectVPffset = listView3.TopItem.Index;
 
-            //   processListUpdating = true;
             listView3.BeginUpdate();
-            //  listView3.SelectedItems.Clear();
-            //listView4.Invoke(new Action(listView4.Items.Clear));
+
             listView3.Items.Clear();
-            //   string filter = toolStripTextBox3.Text;
+         
             // Populate the ListView with process information
             if (currentLog == 0 || currentLog == 2)
             {
@@ -242,8 +293,6 @@ namespace RemoteTaskManager
                     ListViewItem item = new ListViewItem(logMessage.Timestamp.ToString());//.PID.ToString());
                     item.SubItems.Add(logMessage.Message);
 
-                    //   if (filter == "" || process.Cmdline.Contains(filter) || process.PID.ToString().Contains(filter))
-                    //listView4.Invoke(new Action(() => listView4.Items.Add(item)));
                     listView3.Items.Add(item);
 
                 }
@@ -255,21 +304,19 @@ namespace RemoteTaskManager
                     ListViewItem item = new ListViewItem(logMessage.Timestamp.ToString());//.PID.ToString());
                     item.SubItems.Add(logMessage.Message);
 
-                    //   if (filter == "" || process.Cmdline.Contains(filter) || process.PID.ToString().Contains(filter))
-                    //listView4.Invoke(new Action(() => listView4.Items.Add(item)));
                     listView3.Items.Add(item);
 
                 }
             }
             if (selectVPffset > 0)
-                listView3.EnsureVisible(selectVPffset);// savedVerticalScrollPosition ;
+                listView3.EnsureVisible(selectVPffset);
+
             foreach (ColumnHeader column in listView3.Columns)
             {
                 column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
             listView3.EndUpdate();
 
-            //processListUpdating = false;
         }
 
         public bool processListUpdating = false;
@@ -284,13 +331,12 @@ namespace RemoteTaskManager
 
             }
             if (listView4.TopItem != null)
-                selectVPffset = listView4.TopItem.Index;//.Count;
-            //Point savedVerticalScrollPosition = listView1.AutoScrollOffset;// VerticalScroll.Value;
+                selectVPffset = listView4.TopItem.Index;
 
             processListUpdating = true;
             listView4.BeginUpdate();
             listView4.SelectedItems.Clear();
-            //listView4.Invoke(new Action(listView4.Items.Clear));
+
             listView4.Items.Clear();
             string filter = toolStripTextBox3.Text;
             // Populate the ListView with process information
@@ -307,11 +353,10 @@ namespace RemoteTaskManager
 
                 }
                 if (filter == "" || process.Cmdline.Contains(filter) || process.PID.ToString().Contains(filter))
-                    //listView4.Invoke(new Action(() => listView4.Items.Add(item)));
                     listView4.Items.Add(item);
 
             }
-            if (selectVPffset > 0)
+            if (selectVPffset > 0 && selectVPffset < listView4.Items.Count)
                 listView4.EnsureVisible(selectVPffset);// savedVerticalScrollPosition ;
             foreach (ColumnHeader column in listView4.Columns)
             {
@@ -334,15 +379,10 @@ namespace RemoteTaskManager
             }
             if (listView7.TopItem != null)
                 selectVPffset = listView7.TopItem.Index;//.Count;
-            //Point savedVerticalScrollPosition = listView1.AutoScrollOffset;// VerticalScroll.Value;
-
-            //processListUpdating = true;
             listView7.BeginUpdate();
             listView7.SelectedItems.Clear();
-            //listView4.Invoke(new Action(listView4.Items.Clear));
             listView7.Items.Clear();
-            //string filter = toolStripTextBox3.Text;
-            // Populate the ListView with process information
+
             foreach (var user in currentVM.machineUsers.users)
             {
                 ListViewItem item = new ListViewItem(user.UserName);
@@ -356,13 +396,11 @@ namespace RemoteTaskManager
                     item.Selected = true;
 
                 }
-                //if (filter == "" || process.Cmdline.Contains(filter) || process.PID.ToString().Contains(filter))
-                //listView4.Invoke(new Action(() => listView4.Items.Add(item)));
                 listView7.Items.Add(item);
 
             }
             if (selectVPffset > 0)
-                listView7.EnsureVisible(selectVPffset);// savedVerticalScrollPosition ;
+                listView7.EnsureVisible(selectVPffset);
 
             foreach (ColumnHeader column in listView7.Columns)
             {
@@ -370,6 +408,173 @@ namespace RemoteTaskManager
             }
 
             listView7.EndUpdate();
+        }
+        public void PackagesViewForm()
+        {
+
+            string selectedPid = "";
+            int selectVPffset = 0;
+            if (listView8.SelectedItems.Count > 0)
+            {
+                selectedPid = listView8.SelectedItems[0].SubItems[0].Text;
+
+            }
+            if (listView8.TopItem != null)
+                selectVPffset = listView8.TopItem.Index;
+
+            listView8.BeginUpdate();
+            listView8.SelectedItems.Clear();
+            ;
+            listView8.Items.Clear();
+
+            // Populate the ListView with process information
+            foreach (var packages in currentVM.machineRPM.packages)
+            {
+                if (toolStripTextPackageFilter.Text.Trim() == "" ||
+                    packages.Name.Contains(toolStripTextPackageFilter.Text))
+                {
+                    ListViewItem item = new ListViewItem(packages.Name);
+                    item.SubItems.Add(packages.State.ToString());
+                    item.SubItems.Add(packages.RunState.ToString() + " " +
+                        packages.Description.ToString() + " "
+                        + packages.Enabled.ToString());
+
+                    if (selectedPid == packages.Name)
+                    {
+                        item.Selected = true;
+
+                    }
+                    listView8.Items.Add(item);
+                }
+            }
+            if (selectVPffset > 0)
+                listView8.EnsureVisible(selectVPffset);
+
+            foreach (ColumnHeader column in listView8.Columns)
+            {
+                column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+
+            listView8.EndUpdate();
+        }
+        public void NMonListViewForm()
+        {
+            if (currentVM.machineNMON.packages.Count > 0)
+            {
+                string cpu = currentVM.machineNMON.packages[0].Name.ToString();
+                string mem = currentVM.machineNMON.packages[0].Used.ToString();
+                string diskread = currentVM.machineNMON.packages[0].Avail.ToString();
+                string diskwrite = currentVM.machineNMON.packages[0].UsePercent.ToString();
+                double cpuUsage = double.Parse(cpu);
+                double memUsage = double.Parse(mem);
+                double diskwUsage = double.Parse(diskread);
+                double diskrUsage = double.Parse(diskwrite);
+
+                chart1.Series["CPU"].IsVisibleInLegend = false;
+
+                chart1.Series["CPU"].Points.AddXY(chart1.Series["CPU"].Points.Count, cpuUsage);
+                chart2.Series["CPU"].Points.AddXY(chart2.Series["CPU"].Points.Count, memUsage);
+                chart3.Series["CPU"].Points.AddXY(chart3.Series["CPU"].Points.Count, diskwUsage);
+                chart4.Series["CPU"].Points.AddXY(chart4.Series["CPU"].Points.Count, diskrUsage);
+            }
+        }
+        public void SecurityForm()
+        {
+            textBoxSecurityPolicy.Clear();
+
+            if (currentVM.machineSELinux.packages.Count >= 1)
+                textBoxSecurityPolicy.Text = currentVM.machineSELinux.packages[0].AppArmorInfo;
+        }
+        public void DisksViewForm()
+        {
+
+            string selectedPid = "";
+            int selectVPffset = 0;
+            if (listView10.SelectedItems.Count > 0)
+            {
+                selectedPid = listView10.SelectedItems[0].SubItems[0].Text;
+
+            }
+            if (listView10.TopItem != null)
+                selectVPffset = listView10.TopItem.Index;
+
+            listView10.BeginUpdate();
+            listView10.SelectedItems.Clear();
+            ;
+            listView10.Items.Clear();
+
+            // Populate the ListView with process information
+            foreach (var diskinfo in currentVM.machineDisk.packages)
+            {
+                ListViewItem item = new ListViewItem(diskinfo.Name);
+                item.SubItems.Add(diskinfo.Size.ToString());
+                item.SubItems.Add(diskinfo.Used.ToString());
+                item.SubItems.Add(diskinfo.Avail.ToString());
+                item.SubItems.Add(diskinfo.UsePercent.ToString());
+                item.SubItems.Add(diskinfo.MountedOn.ToString());
+                if (selectedPid == diskinfo.Name)
+                {
+                    item.Selected = true;
+
+                }
+                listView10.Items.Add(item);
+
+            }
+            if (selectVPffset > 0)
+                listView10.EnsureVisible(selectVPffset);
+
+            foreach (ColumnHeader column in listView10.Columns)
+            {
+                column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+
+            listView10.EndUpdate();
+        }
+        public void CronJobsViewForm()
+        {
+
+            string selectedPid = "";
+            int selectVPffset = 0;
+            if (listView9.SelectedItems.Count > 0)
+            {
+                selectedPid = listView9.SelectedItems[0].SubItems[0].Text;
+
+            }
+            if (listView9.TopItem != null)
+                selectVPffset = listView9.TopItem.Index;
+
+            listView9.BeginUpdate();
+            listView9.SelectedItems.Clear();
+            ;
+            listView9.Items.Clear();
+
+            // Populate the ListView with process information
+            foreach (var cronjob in currentVM.machineCron.cronjobs)
+            {
+                ListViewItem item = new ListViewItem(cronjob.Minute);
+                item.SubItems.Add(cronjob.Hour.ToString());
+                item.SubItems.Add(cronjob.Month.ToString());
+                item.SubItems.Add(cronjob.DayOfM.ToString());
+                item.SubItems.Add(cronjob.DayOfW.ToString());
+                item.SubItems.Add(cronjob.User.ToString());
+                item.SubItems.Add(cronjob.CmdLine.ToString());
+                if (selectedPid == cronjob.CmdLine)
+                {
+                    item.Selected = true;
+
+                }
+                listView9.Items.Add(item);
+
+            }
+            if (selectVPffset > 0)
+                listView9.EnsureVisible(selectVPffset);
+
+            foreach (ColumnHeader column in listView9.Columns)
+            {
+                column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+
+            listView9.EndUpdate();
         }
         public void ServiceListViewForm()
         {
@@ -382,15 +587,13 @@ namespace RemoteTaskManager
 
             }
             if (listView6.TopItem != null)
-                selectVPffset = listView6.TopItem.Index;//.Count;
-                                                        //Point savedVerticalScrollPosition = listView1.AutoScrollOffset;// VerticalScroll.Value;
-
-            //    processListUpdating = true;
+                selectVPffset = listView6.TopItem.Index;
             listView6.BeginUpdate();
             listView6.SelectedItems.Clear();
-            //listView4.Invoke(new Action(listView4.Items.Clear));
+
             listView6.Items.Clear();
             string filter = toolStripTextBox3.Text;
+
             // Populate the ListView with process information
             foreach (var service in currentVM.machineServices.services)
             {
@@ -405,12 +608,10 @@ namespace RemoteTaskManager
                     item.Selected = true;
 
                 }
-                //if (filter == "" || process.Cmdline.Contains(filter) || process.PID.ToString().Contains(filter))
-                //listView4.Invoke(new Action(() => listView4.Items.Add(item)));
-                listView6.Items.Add(item);
+                 listView6.Items.Add(item);
 
             }
-            if (selectVPffset > 0)
+            if (selectVPffset > 0 && selectVPffset < listView6.Items.Count)
                 listView6.EnsureVisible(selectVPffset);// savedVerticalScrollPosition ;
             foreach (ColumnHeader column in listView6.Columns)
             {
@@ -425,7 +626,6 @@ namespace RemoteTaskManager
             listView5.Items.Clear();
             //      if (listView4.SelectedItems.Count > 0)
             {
-                //        string PID = listView4.SelectedItems[0].Text;
 
                 // Populate the ListView with process information
                 foreach (var process in currentVM.machinePS.processes)
@@ -527,13 +727,13 @@ namespace RemoteTaskManager
             item.SubItems.Add("22");
             item.StateImageIndex = 0;
 
-            listView2.Items.Add(item);
+            listViewRemoteMachines.Items.Add(item);
         }
-        private void toolStripButton4_Click(object sender, EventArgs e)
+        private void RemoveSelectedRemoteMachine()
         {
-            if (listView2.SelectedItems.Count > 0)
+            if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
-                string selectedIP = listView2.SelectedItems[0].Text;
+                string selectedIP = listViewRemoteMachines.SelectedItems[0].Text;
 
                 foreach (var remoteMachine in remoteMachines.vmList)
                 {
@@ -543,9 +743,13 @@ namespace RemoteTaskManager
                         break;
                     }
                 }
-                listView2.Items.Remove(listView2.SelectedItems[0]);
+                listViewRemoteMachines.Items.Remove(listViewRemoteMachines.SelectedItems[0]);
                 SaveRemoteMachines();
             }
+        }
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+            RemoveSelectedRemoteMachine();
         }
 
         private void turnOffToolStripMenuItem_Click(object sender, EventArgs e)
@@ -594,9 +798,9 @@ namespace RemoteTaskManager
         }
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            if (listView2.SelectedItems.Count > 0)
+            if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
-                string selectedIP = listView2.SelectedItems[0].Text.ToString();
+                string selectedIP = listViewRemoteMachines.SelectedItems[0].Text.ToString();
 
                 foreach (var remoteMachine in remoteMachines.vmList)
                 {
@@ -606,6 +810,8 @@ namespace RemoteTaskManager
                         dlg.UserName = remoteMachine.UserName;
                         dlg.Password = remoteMachine.Password;
                         dlg.Port = remoteMachine.Port.ToString();
+                        dlg.IP = selectedIP;
+                        dlg.IPFixed = true;
                         if (dlg.ShowDialog() == DialogResult.OK)
                         {
                             remoteMachine.UserName = dlg.UserName;
@@ -633,7 +839,7 @@ namespace RemoteTaskManager
 
         private void listView2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listView2.SelectedItems.Count > 0)
+            if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
                 toolStripButton4.Enabled = true;
                 toolStripButton1.Enabled = true;
@@ -657,15 +863,22 @@ namespace RemoteTaskManager
             else
                 toolStripButton3.Enabled = false;
         }
-
-        private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ConnectToSelectedRemoteMachine()
         {
-            if (listView2.SelectedItems.Count > 0)
+            if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
-                string vmName = listView2.SelectedItems[0].Text;
+                string vmName = listViewRemoteMachines.SelectedItems[0].Text;
 
                 currentVM = new SingleMachine();
-
+                foreach (RemoteMachineInfo rm in remoteMachines.vmList)
+                {
+                    if (rm.IP == vmName)
+                    {
+                        currentVM.rootUser = rm.UserName;
+                        currentVM.rootPassword = rm.Password;
+                        break;
+                    }
+                }
                 currentVM.machineName = vmName;
                 currentVM.IP = vmName;
                 //
@@ -674,6 +887,10 @@ namespace RemoteTaskManager
                 bindingSource1.Add(currentVM);
                 commandQue.Enqueue("connect");
             }
+        }
+        private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ConnectToSelectedRemoteMachine();
         }
 
         private void toolStrip3_TextChanged(object sender, EventArgs e)
@@ -793,20 +1010,31 @@ namespace RemoteTaskManager
             // and get the response
             //    Task<string> response = chat.GetResponseFromChatbotAsync();
             //Task.
+
             string response = "";
             Task.Run(async () =>
              {
-                 response = await chat.GetResponseFromChatbotAsync(); // Call the async function within Task.Run
-                 Console.WriteLine(response);
+                 try
+                 {
+                     response = await chat.GetResponseFromChatbotAsync(); // Call the async function within Task.Run
+                     Console.WriteLine(response);
+                 }
+                 catch
+                 {
 
+                 }
                  // Continue with any code that needs to run after the async operation is complete
              }).GetAwaiter().GetResult(); // Block the current thread until the Task is complete
                                           // toolTip1.ToolTipTitle = response;
                                           //  toolTip1.
 
             response = InsertLineBreaksEveryNWords(response, 10);
-            toolTip1.SetToolTip(listView4, response);
-            toolTip1.ShowAlways = true;
+            //toolTip1.SetToolTip(listView4, response);
+            //toolTip1.ShowAlways = true;
+            GPTResponse dlg = new GPTResponse();
+            dlg.Show();
+            dlg.SetGPTResponse(response);
+
         }
 
         private void openAIToolStripMenuItem_Click(object sender, EventArgs e)
@@ -835,6 +1063,92 @@ namespace RemoteTaskManager
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void Disconnect()
+        {
+            currentVM = new SingleMachine();
+            this.Invoke(new Action(ProcessListViewForm));
+            this.Invoke(new Action(ServiceListViewForm));
+            this.Invoke(new Action(LogEntriesPopulate));
+            this.Invoke(new Action(UsersListViewForm));
+
+            bindingSource1.Clear();
+            refreshBindings();
+        }
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Disconnect();
+        }
+
+        private void removeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveSelectedRemoteMachine();
+        }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConnectToSelectedRemoteMachine();
+        }
+
+        private void toolStripButton5_Click_1(object sender, EventArgs e)
+        {
+            //  currentVM.ScanVonrabilities();
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            CredentialsDlg dlg = new CredentialsDlg();
+            dlg.UserName = "";// remoteMachine.UserName;
+            dlg.Password = "";// remoteMachine.Password;
+            dlg.Port = "22";// remoteMachine.Port.ToString();
+            dlg.IPFixed = false;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                RemoteMachineInfo remoteMachine = new RemoteMachineInfo();
+                remoteMachine.IP = dlg.IP;
+                remoteMachine.UserName = dlg.UserName;
+                remoteMachine.Password = dlg.Password;
+                string input = dlg.Port; // Replace with your input string
+                if (int.TryParse(input, out int result))
+                {
+                    remoteMachine.Port = result;
+                }
+                else
+                {
+                    remoteMachine.Port = 22;
+                }
+            }
+            else
+            {
+                return;
+            }
+            SaveRemoteMachines();
+
+        }
+
+        private void toolStripButton8_Click(object sender, EventArgs e)
+        {
+            // currentVM.ScanVonrabilities2();
+            VulnerScan dlg = new VulnerScan();
+            dlg.SetCurrentVM(currentVM);
+            dlg.ShowDialog();
+
+        }
+
+        private void toolStripTextPackageFilter_Click(object sender, EventArgs e)
+        {
+          
+        }
+
+        private void toolStripTextPackageFilter_TextChanged(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(PackagesViewForm));
         }
     }
 }

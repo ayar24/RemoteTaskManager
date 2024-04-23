@@ -11,12 +11,12 @@ namespace RemoteTaskManager
 
         public class UserInfo
         {
-            public string UserName { get; set; }
-            public string FullName { get; set; }
-            public string UserId { get; set; }
-            public string GroupId { get; set; }
-            public string HomeDirectory { get; set; }
-            public string Shell { get; set; }
+            public string UserName { get; set; } = "";    
+            public string FullName { get; set; } = "";
+            public string UserId { get; set; } = "";
+            public string GroupId { get; set; } = "";
+            public string HomeDirectory { get; set; } = "";
+            public string Shell { get; set; } = "";
         }
 
         static List<UserInfo> ParsePasswdOutput(string output)

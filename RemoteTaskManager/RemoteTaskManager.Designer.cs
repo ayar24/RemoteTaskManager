@@ -30,8 +30,27 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RemoteTaskManager));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
             menuStrip1 = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            bindingSource1 = new BindingSource(components);
+            toolStripSeparator5 = new ToolStripSeparator();
             startMonitoringToolStripMenuItem = new ToolStripMenuItem();
             stopMonitoringToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator2 = new ToolStripSeparator();
@@ -42,11 +61,12 @@
             autoConnectToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             openAIToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
+            vulnerAPIToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
-            bindingSource1 = new BindingSource(components);
             toolStrip1 = new ToolStrip();
             toolStripLabel1 = new ToolStripLabel();
             toolStripTextBox1 = new ToolStripTextBox();
@@ -58,9 +78,14 @@
             toolStripButton1 = new ToolStripButton();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
-            listView2 = new ListView();
+            listViewRemoteMachines = new ListView();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
+            contextMenuStripRemoteMachines = new ContextMenuStrip(components);
+            connectToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
+            addToolStripMenuItem = new ToolStripMenuItem();
+            removeToolStripMenuItem = new ToolStripMenuItem();
             imageList1 = new ImageList(components);
             listView1 = new ListView();
             columnHeader1 = new ColumnHeader();
@@ -119,7 +144,21 @@
             columnHeader18 = new ColumnHeader();
             columnHeader19 = new ColumnHeader();
             tabPage3 = new TabPage();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             tabPage4 = new TabPage();
+            toolStrip5 = new ToolStrip();
+            toolStripLabel5 = new ToolStripLabel();
+            toolStripTextPackageFilter = new ToolStripTextBox();
+            toolStripButton5 = new ToolStripButton();
+            toolStripButton8 = new ToolStripButton();
+            listView8 = new ListView();
+            columnHeader25 = new ColumnHeader();
+            columnHeader27 = new ColumnHeader();
+            columnHeader26 = new ColumnHeader();
             tabPage5 = new TabPage();
             listView7 = new ListView();
             columnHeader20 = new ColumnHeader();
@@ -139,15 +178,31 @@
             toolStrip2 = new ToolStrip();
             toolStripComboBox1 = new ToolStripComboBox();
             tabPage7 = new TabPage();
+            listView10 = new ListView();
+            columnHeader35 = new ColumnHeader();
+            columnHeader36 = new ColumnHeader();
+            columnHeader37 = new ColumnHeader();
+            columnHeader38 = new ColumnHeader();
+            columnHeader39 = new ColumnHeader();
+            columnHeader40 = new ColumnHeader();
             tabPage8 = new TabPage();
+            textBoxSecurityPolicy = new TextBox();
             tabPage9 = new TabPage();
+            listView9 = new ListView();
+            columnHeader30 = new ColumnHeader();
+            columnHeader31 = new ColumnHeader();
+            columnHeader32 = new ColumnHeader();
+            columnHeader33 = new ColumnHeader();
+            columnHeader34 = new ColumnHeader();
+            columnHeader28 = new ColumnHeader();
+            columnHeader29 = new ColumnHeader();
             openFileDialog1 = new OpenFileDialog();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             toolTip1 = new ToolTip(components);
             menuStrip1.SuspendLayout();
-            statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
+            statusStrip1.SuspendLayout();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -157,6 +212,7 @@
             splitContainer2.Panel1.SuspendLayout();
             splitContainer2.Panel2.SuspendLayout();
             splitContainer2.SuspendLayout();
+            contextMenuStripRemoteMachines.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -169,10 +225,21 @@
             toolStrip3.SuspendLayout();
             contextMenuStrip2.SuspendLayout();
             tabPage10.SuspendLayout();
+            tabPage3.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)chart3).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chart2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chart1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chart4).BeginInit();
+            tabPage4.SuspendLayout();
+            toolStrip5.SuspendLayout();
             tabPage5.SuspendLayout();
             toolStrip4.SuspendLayout();
             tabPage6.SuspendLayout();
             toolStrip2.SuspendLayout();
+            tabPage7.SuspendLayout();
+            tabPage8.SuspendLayout();
+            tabPage9.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -187,10 +254,29 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { startMonitoringToolStripMenuItem, stopMonitoringToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator5, startMonitoringToolStripMenuItem, stopMonitoringToolStripMenuItem, toolStripSeparator2, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "&File";
+            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.DataBindings.Add(new Binding("Enabled", bindingSource1, "canDisconnect", true));
+            toolStripMenuItem1.Enabled = false;
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(179, 26);
+            toolStripMenuItem1.Text = "Disconnect";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
+            // 
+            // bindingSource1
+            // 
+            bindingSource1.DataSource = typeof(SingleMachine);
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(176, 6);
             // 
             // startMonitoringToolStripMenuItem
             // 
@@ -221,7 +307,7 @@
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultCredentialsToolStripMenuItem, pollingIntervalsToolStripMenuItem, autoConnectToolStripMenuItem, toolStripSeparator3, openAIToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { defaultCredentialsToolStripMenuItem, pollingIntervalsToolStripMenuItem, autoConnectToolStripMenuItem, toolStripSeparator3, openAIToolStripMenuItem, toolStripSeparator6, vulnerAPIToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new Size(75, 24);
             optionsToolStripMenuItem.Text = "&Options";
@@ -259,6 +345,17 @@
             openAIToolStripMenuItem.Text = "OpenAI API";
             openAIToolStripMenuItem.Click += openAIToolStripMenuItem_Click;
             // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(216, 6);
+            // 
+            // vulnerAPIToolStripMenuItem
+            // 
+            vulnerAPIToolStripMenuItem.Name = "vulnerAPIToolStripMenuItem";
+            vulnerAPIToolStripMenuItem.Size = new Size(219, 26);
+            vulnerAPIToolStripMenuItem.Text = "Vulners API";
+            // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
@@ -289,10 +386,6 @@
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             toolStripStatusLabel1.Size = new Size(109, 20);
             toolStripStatusLabel1.Text = "Not Connected";
-            // 
-            // bindingSource1
-            // 
-            bindingSource1.DataSource = typeof(SingleMachine);
             // 
             // toolStrip1
             // 
@@ -398,7 +491,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(listView2);
+            splitContainer2.Panel1.Controls.Add(listViewRemoteMachines);
             // 
             // splitContainer2.Panel2
             // 
@@ -407,21 +500,22 @@
             splitContainer2.SplitterDistance = 160;
             splitContainer2.TabIndex = 0;
             // 
-            // listView2
+            // listViewRemoteMachines
             // 
-            listView2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            listView2.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader4 });
-            listView2.FullRowSelect = true;
-            listView2.Location = new Point(3, 3);
-            listView2.MultiSelect = false;
-            listView2.Name = "listView2";
-            listView2.Size = new Size(263, 154);
-            listView2.StateImageList = imageList1;
-            listView2.TabIndex = 0;
-            listView2.UseCompatibleStateImageBehavior = false;
-            listView2.View = View.Details;
-            listView2.SelectedIndexChanged += listView2_SelectedIndexChanged;
-            listView2.MouseDoubleClick += listView2_MouseDoubleClick;
+            listViewRemoteMachines.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listViewRemoteMachines.Columns.AddRange(new ColumnHeader[] { columnHeader3, columnHeader4 });
+            listViewRemoteMachines.ContextMenuStrip = contextMenuStripRemoteMachines;
+            listViewRemoteMachines.FullRowSelect = true;
+            listViewRemoteMachines.Location = new Point(3, 3);
+            listViewRemoteMachines.MultiSelect = false;
+            listViewRemoteMachines.Name = "listViewRemoteMachines";
+            listViewRemoteMachines.Size = new Size(263, 154);
+            listViewRemoteMachines.StateImageList = imageList1;
+            listViewRemoteMachines.TabIndex = 0;
+            listViewRemoteMachines.UseCompatibleStateImageBehavior = false;
+            listViewRemoteMachines.View = View.Details;
+            listViewRemoteMachines.SelectedIndexChanged += listView2_SelectedIndexChanged;
+            listViewRemoteMachines.MouseDoubleClick += listView2_MouseDoubleClick;
             // 
             // columnHeader3
             // 
@@ -431,6 +525,39 @@
             // columnHeader4
             // 
             columnHeader4.Text = "Port";
+            // 
+            // contextMenuStripRemoteMachines
+            // 
+            contextMenuStripRemoteMachines.ImageScalingSize = new Size(20, 20);
+            contextMenuStripRemoteMachines.Items.AddRange(new ToolStripItem[] { connectToolStripMenuItem, toolStripSeparator4, addToolStripMenuItem, removeToolStripMenuItem });
+            contextMenuStripRemoteMachines.Name = "contextMenuStripRemoteMachines";
+            contextMenuStripRemoteMachines.Size = new Size(133, 82);
+            // 
+            // connectToolStripMenuItem
+            // 
+            connectToolStripMenuItem.Name = "connectToolStripMenuItem";
+            connectToolStripMenuItem.Size = new Size(132, 24);
+            connectToolStripMenuItem.Text = "Connect";
+            connectToolStripMenuItem.Click += connectToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(129, 6);
+            // 
+            // addToolStripMenuItem
+            // 
+            addToolStripMenuItem.Name = "addToolStripMenuItem";
+            addToolStripMenuItem.Size = new Size(132, 24);
+            addToolStripMenuItem.Text = "Add..";
+            addToolStripMenuItem.Click += addToolStripMenuItem_Click;
+            // 
+            // removeToolStripMenuItem
+            // 
+            removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            removeToolStripMenuItem.Size = new Size(132, 24);
+            removeToolStripMenuItem.Text = "Remove";
+            removeToolStripMenuItem.Click += removeToolStripMenuItem_Click;
             // 
             // imageList1
             // 
@@ -955,6 +1082,7 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(tableLayoutPanel1);
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
             tabPage3.Size = new Size(517, 333);
@@ -962,14 +1090,198 @@
             tabPage3.Text = "Performance";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 2;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(chart3, 0, 1);
+            tableLayoutPanel1.Controls.Add(chart2, 0, 1);
+            tableLayoutPanel1.Controls.Add(chart1, 1, 0);
+            tableLayoutPanel1.Controls.Add(chart4, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.Size = new Size(517, 333);
+            tableLayoutPanel1.TabIndex = 1;
+            // 
+            // chart3
+            // 
+            chart3.BorderlineWidth = 0;
+            chart3.BorderSkin.BorderColor = Color.LightGray;
+            chartArea1.Name = "ChartArea1";
+            chart3.ChartAreas.Add(chartArea1);
+            chart3.Dock = DockStyle.Fill;
+            legend1.Name = "Legend1";
+            chart3.Legends.Add(legend1);
+            chart3.Location = new Point(3, 169);
+            chart3.Name = "chart3";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series1.IsVisibleInLegend = false;
+            series1.Legend = "Legend1";
+            series1.Name = "CPU";
+            chart3.Series.Add(series1);
+            chart3.Size = new Size(252, 161);
+            chart3.TabIndex = 2;
+            chart3.Text = "chart3";
+            title1.Name = "Title1";
+            title1.Text = "Disk Read";
+            chart3.Titles.Add(title1);
+            // 
+            // chart2
+            // 
+            chart2.BorderlineWidth = 0;
+            chart2.BorderSkin.BorderColor = Color.LightGray;
+            chartArea2.Name = "ChartArea1";
+            chart2.ChartAreas.Add(chartArea2);
+            chart2.Dock = DockStyle.Fill;
+            legend2.Name = "Legend1";
+            chart2.Legends.Add(legend2);
+            chart2.Location = new Point(261, 169);
+            chart2.Name = "chart2";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series2.IsVisibleInLegend = false;
+            series2.Legend = "Legend1";
+            series2.Name = "CPU";
+            chart2.Series.Add(series2);
+            chart2.Size = new Size(253, 161);
+            chart2.TabIndex = 1;
+            chart2.Text = "chart2";
+            title2.Name = "Title1";
+            title2.Text = "Disk Write";
+            chart2.Titles.Add(title2);
+            // 
+            // chart1
+            // 
+            chart1.BorderlineWidth = 0;
+            chart1.BorderSkin.BorderColor = Color.LightGray;
+            chartArea3.Name = "ChartArea1";
+            chart1.ChartAreas.Add(chartArea3);
+            chart1.Dock = DockStyle.Fill;
+            legend3.Name = "Legend1";
+            chart1.Legends.Add(legend3);
+            chart1.Location = new Point(261, 3);
+            chart1.Name = "chart1";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series3.IsVisibleInLegend = false;
+            series3.Legend = "Legend1";
+            series3.Name = "CPU";
+            chart1.Series.Add(series3);
+            chart1.Size = new Size(253, 160);
+            chart1.TabIndex = 0;
+            chart1.Text = "chart1";
+            title3.Name = "Title1";
+            title3.Text = "CPU";
+            chart1.Titles.Add(title3);
+            // 
+            // chart4
+            // 
+            chartArea4.Name = "ChartArea1";
+            chart4.ChartAreas.Add(chartArea4);
+            chart4.Dock = DockStyle.Fill;
+            legend4.LegendStyle = System.Windows.Forms.DataVisualization.Charting.LegendStyle.Row;
+            legend4.Name = "Legend1";
+            legend4.TableStyle = System.Windows.Forms.DataVisualization.Charting.LegendTableStyle.Wide;
+            chart4.Legends.Add(legend4);
+            chart4.Location = new Point(3, 3);
+            chart4.Name = "chart4";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.IsVisibleInLegend = false;
+            series4.Legend = "Legend1";
+            series4.Name = "CPU";
+            chart4.Series.Add(series4);
+            chart4.Size = new Size(252, 160);
+            chart4.TabIndex = 3;
+            chart4.Text = "Memory";
+            title4.Name = "Title1";
+            title4.Text = "Memory";
+            chart4.Titles.Add(title4);
+            // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(toolStrip5);
+            tabPage4.Controls.Add(listView8);
             tabPage4.Location = new Point(4, 29);
             tabPage4.Name = "tabPage4";
             tabPage4.Size = new Size(517, 333);
             tabPage4.TabIndex = 3;
             tabPage4.Text = "Packages";
             tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // toolStrip5
+            // 
+            toolStrip5.ImageScalingSize = new Size(20, 20);
+            toolStrip5.Items.AddRange(new ToolStripItem[] { toolStripLabel5, toolStripTextPackageFilter, toolStripButton5, toolStripButton8 });
+            toolStrip5.Location = new Point(0, 0);
+            toolStrip5.Name = "toolStrip5";
+            toolStrip5.Size = new Size(517, 27);
+            toolStrip5.TabIndex = 2;
+            toolStrip5.Text = "toolStrip5";
+            // 
+            // toolStripLabel5
+            // 
+            toolStripLabel5.Name = "toolStripLabel5";
+            toolStripLabel5.Size = new Size(45, 24);
+            toolStripLabel5.Text = "Filter:";
+            // 
+            // toolStripTextPackageFilter
+            // 
+            toolStripTextPackageFilter.Name = "toolStripTextPackageFilter";
+            toolStripTextPackageFilter.Size = new Size(100, 27);
+            toolStripTextPackageFilter.Click += toolStripTextPackageFilter_Click;
+            toolStripTextPackageFilter.TextChanged += toolStripTextPackageFilter_TextChanged;
+            // 
+            // toolStripButton5
+            // 
+            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
+            toolStripButton5.ImageTransparentColor = Color.Magenta;
+            toolStripButton5.Name = "toolStripButton5";
+            toolStripButton5.Size = new Size(29, 24);
+            toolStripButton5.Text = "Search NIST";
+            toolStripButton5.Click += toolStripButton5_Click_1;
+            // 
+            // toolStripButton8
+            // 
+            toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton8.Image = (Image)resources.GetObject("toolStripButton8.Image");
+            toolStripButton8.ImageTransparentColor = Color.Magenta;
+            toolStripButton8.Name = "toolStripButton8";
+            toolStripButton8.Size = new Size(29, 24);
+            toolStripButton8.Text = "Search Vulners";
+            toolStripButton8.Click += toolStripButton8_Click;
+            // 
+            // listView8
+            // 
+            listView8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listView8.Columns.AddRange(new ColumnHeader[] { columnHeader25, columnHeader27, columnHeader26 });
+            listView8.FullRowSelect = true;
+            listView8.Location = new Point(4, 28);
+            listView8.Name = "listView8";
+            listView8.Size = new Size(509, 305);
+            listView8.TabIndex = 1;
+            listView8.UseCompatibleStateImageBehavior = false;
+            listView8.View = View.Details;
+            // 
+            // columnHeader25
+            // 
+            columnHeader25.Text = "Name";
+            // 
+            // columnHeader27
+            // 
+            columnHeader27.Text = "Arch";
+            // 
+            // columnHeader26
+            // 
+            columnHeader26.Text = "Version";
             // 
             // tabPage5
             // 
@@ -1102,7 +1414,6 @@
             // 
             // toolStripComboBox1
             // 
-            toolStripComboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             toolStripComboBox1.FlatStyle = FlatStyle.Flat;
             toolStripComboBox1.Items.AddRange(new object[] { "System Logs", "Syscalls Read/Write", "Auth Logs" });
             toolStripComboBox1.Name = "toolStripComboBox1";
@@ -1111,6 +1422,7 @@
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(listView10);
             tabPage7.Location = new Point(4, 29);
             tabPage7.Name = "tabPage7";
             tabPage7.Size = new Size(517, 333);
@@ -1118,8 +1430,45 @@
             tabPage7.Text = "Disk";
             tabPage7.UseVisualStyleBackColor = true;
             // 
+            // listView10
+            // 
+            listView10.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listView10.Columns.AddRange(new ColumnHeader[] { columnHeader35, columnHeader36, columnHeader37, columnHeader38, columnHeader39, columnHeader40 });
+            listView10.FullRowSelect = true;
+            listView10.Location = new Point(4, 3);
+            listView10.Name = "listView10";
+            listView10.Size = new Size(509, 327);
+            listView10.TabIndex = 1;
+            listView10.UseCompatibleStateImageBehavior = false;
+            listView10.View = View.Details;
+            // 
+            // columnHeader35
+            // 
+            columnHeader35.Text = "Name";
+            // 
+            // columnHeader36
+            // 
+            columnHeader36.Text = "Size";
+            // 
+            // columnHeader37
+            // 
+            columnHeader37.Text = "Used";
+            // 
+            // columnHeader38
+            // 
+            columnHeader38.Text = "Avail";
+            // 
+            // columnHeader39
+            // 
+            columnHeader39.Text = "Used %";
+            // 
+            // columnHeader40
+            // 
+            columnHeader40.Text = "Mounted On";
+            // 
             // tabPage8
             // 
+            tabPage8.Controls.Add(textBoxSecurityPolicy);
             tabPage8.Location = new Point(4, 29);
             tabPage8.Name = "tabPage8";
             tabPage8.Size = new Size(517, 333);
@@ -1127,14 +1476,65 @@
             tabPage8.Text = "Security";
             tabPage8.UseVisualStyleBackColor = true;
             // 
+            // textBoxSecurityPolicy
+            // 
+            textBoxSecurityPolicy.Dock = DockStyle.Fill;
+            textBoxSecurityPolicy.Location = new Point(0, 0);
+            textBoxSecurityPolicy.Multiline = true;
+            textBoxSecurityPolicy.Name = "textBoxSecurityPolicy";
+            textBoxSecurityPolicy.ReadOnly = true;
+            textBoxSecurityPolicy.Size = new Size(517, 333);
+            textBoxSecurityPolicy.TabIndex = 0;
+            // 
             // tabPage9
             // 
+            tabPage9.Controls.Add(listView9);
             tabPage9.Location = new Point(4, 29);
             tabPage9.Name = "tabPage9";
             tabPage9.Size = new Size(517, 333);
             tabPage9.TabIndex = 8;
             tabPage9.Text = "Cron";
             tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // listView9
+            // 
+            listView9.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listView9.Columns.AddRange(new ColumnHeader[] { columnHeader30, columnHeader31, columnHeader32, columnHeader33, columnHeader34, columnHeader28, columnHeader29 });
+            listView9.FullRowSelect = true;
+            listView9.Location = new Point(4, 3);
+            listView9.Name = "listView9";
+            listView9.Size = new Size(509, 327);
+            listView9.TabIndex = 1;
+            listView9.UseCompatibleStateImageBehavior = false;
+            listView9.View = View.Details;
+            // 
+            // columnHeader30
+            // 
+            columnHeader30.Text = "Minute";
+            // 
+            // columnHeader31
+            // 
+            columnHeader31.Text = "Hour";
+            // 
+            // columnHeader32
+            // 
+            columnHeader32.Text = "Month";
+            // 
+            // columnHeader33
+            // 
+            columnHeader33.Text = "DayOfMonth";
+            // 
+            // columnHeader34
+            // 
+            columnHeader34.Text = "DayOfWeek";
+            // 
+            // columnHeader28
+            // 
+            columnHeader28.Text = "User";
+            // 
+            // columnHeader29
+            // 
+            columnHeader29.Text = "Command";
             // 
             // openFileDialog1
             // 
@@ -1170,9 +1570,9 @@
             Load += RemoteTaskManager_Load;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
@@ -1183,6 +1583,7 @@
             splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
+            contextMenuStripRemoteMachines.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
@@ -1198,6 +1599,16 @@
             toolStrip3.PerformLayout();
             contextMenuStrip2.ResumeLayout(false);
             tabPage10.ResumeLayout(false);
+            tabPage3.ResumeLayout(false);
+            tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)chart3).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chart2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chart1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chart4).EndInit();
+            tabPage4.ResumeLayout(false);
+            tabPage4.PerformLayout();
+            toolStrip5.ResumeLayout(false);
+            toolStrip5.PerformLayout();
             tabPage5.ResumeLayout(false);
             tabPage5.PerformLayout();
             toolStrip4.ResumeLayout(false);
@@ -1206,6 +1617,10 @@
             tabPage6.PerformLayout();
             toolStrip2.ResumeLayout(false);
             toolStrip2.PerformLayout();
+            tabPage7.ResumeLayout(false);
+            tabPage8.ResumeLayout(false);
+            tabPage8.PerformLayout();
+            tabPage9.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1225,7 +1640,7 @@
         private ToolStripMenuItem optionsToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ListView listView1;
-        private ListView listView2;
+        private ListView listViewRemoteMachines;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private TabPage tabPage3;
         private TabPage tabPage4;
@@ -1327,5 +1742,44 @@
         private ToolTip toolTip1;
         private ToolStripMenuItem openAIToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ListView listView8;
+        private ColumnHeader columnHeader25;
+        private ColumnHeader columnHeader26;
+        private ColumnHeader columnHeader27;
+        private ListView listView10;
+        private ColumnHeader columnHeader35;
+        private ColumnHeader columnHeader36;
+        private ColumnHeader columnHeader37;
+        private ColumnHeader columnHeader38;
+        private ColumnHeader columnHeader39;
+        private ListView listView9;
+        private ColumnHeader columnHeader30;
+        private ColumnHeader columnHeader31;
+        private ColumnHeader columnHeader32;
+        private ColumnHeader columnHeader33;
+        private ColumnHeader columnHeader34;
+        private ContextMenuStrip contextMenuStripRemoteMachines;
+        private ToolStripMenuItem connectToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripMenuItem addToolStripMenuItem;
+        private ToolStripMenuItem removeToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator5;
+        private ColumnHeader columnHeader28;
+        private ColumnHeader columnHeader29;
+        private ColumnHeader columnHeader40;
+        private TextBox textBoxSecurityPolicy;
+        private ToolStrip toolStrip5;
+        private ToolStripButton toolStripButton5;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart4;
+        private ToolStripLabel toolStripLabel5;
+        private ToolStripTextBox toolStripTextPackageFilter;
+        private ToolStripButton toolStripButton8;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripMenuItem vulnerAPIToolStripMenuItem;
     }
 }

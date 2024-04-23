@@ -13,7 +13,7 @@ namespace RemoteTaskManager
 
     public partial class OpenAISettings : Form
     {
-        public string APIKey { get; set; }
+        public string APIKey { get; set; } = "";
 
         public OpenAISettings()
         {
