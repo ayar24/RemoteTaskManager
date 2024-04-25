@@ -224,7 +224,7 @@ namespace RemoteTaskManager
                                     {
                                         currentVM = new SingleMachine();
                                         bindingSource1.Clear();
-                                        MessageBox.Show("Failed to connect.");
+                                        MessageBox.Show("Failed to connect. \nMake sure that credentials and destination IP are correct and that target machine has an ssh server running.", "Connection Failed");
                                         refreshBindings();
                                     }
                                 }
@@ -284,8 +284,7 @@ namespace RemoteTaskManager
             listView3.BeginUpdate();
 
             listView3.Items.Clear();
-         
-            // Populate the ListView with process information
+
             if (currentLog == 0 || currentLog == 2)
             {
                 foreach (var logMessage in currentVM.logMessages.logMessages)
@@ -334,6 +333,14 @@ namespace RemoteTaskManager
                 selectVPffset = listView4.TopItem.Index;
 
             processListUpdating = true;
+            if (currentVM.machinePS.processes.Count > 0)
+            {
+                toolStripButton7.Enabled = true;
+            }
+            else
+            {
+                toolStripButton7.Enabled = false;
+            }
             listView4.BeginUpdate();
             listView4.SelectedItems.Clear();
 
@@ -421,7 +428,18 @@ namespace RemoteTaskManager
             }
             if (listView8.TopItem != null)
                 selectVPffset = listView8.TopItem.Index;
+            if (currentVM.machineRPM.packages.Count() > 0)
+            {
+                toolStripButton8.Enabled = true;
+                toolStripButton5.Enabled = true;
 
+            }
+            else
+            {
+                toolStripButton8.Enabled = false;
+                toolStripButton5.Enabled = false;
+
+            }
             listView8.BeginUpdate();
             listView8.SelectedItems.Clear();
             ;
@@ -459,23 +477,26 @@ namespace RemoteTaskManager
         }
         public void NMonListViewForm()
         {
-            if (currentVM.machineNMON.packages.Count > 0)
+            if (currentVM.machineNMON.packages.Count > 0 && currentVM.machineNMON.packages[0].Name != null)
             {
-                string cpu = currentVM.machineNMON.packages[0].Name.ToString();
-                string mem = currentVM.machineNMON.packages[0].Used.ToString();
-                string diskread = currentVM.machineNMON.packages[0].Avail.ToString();
-                string diskwrite = currentVM.machineNMON.packages[0].UsePercent.ToString();
-                double cpuUsage = double.Parse(cpu);
-                double memUsage = double.Parse(mem);
-                double diskwUsage = double.Parse(diskread);
-                double diskrUsage = double.Parse(diskwrite);
+                if (currentVM.machineNMON.packages[0].Name != null && currentVM.machineNMON.packages[0].Name != "")
+                {
+                    string cpu = currentVM.machineNMON.packages[0].Name.ToString();
+                    string mem = currentVM.machineNMON.packages[0].Used.ToString();
+                    string diskread = currentVM.machineNMON.packages[0].Avail.ToString();
+                    string diskwrite = currentVM.machineNMON.packages[0].UsePercent.ToString();
+                    double cpuUsage = double.Parse(cpu);
+                    double memUsage = double.Parse(mem);
+                    double diskwUsage = double.Parse(diskread);
+                    double diskrUsage = double.Parse(diskwrite);
 
-                chart1.Series["CPU"].IsVisibleInLegend = false;
+                    chart1.Series["CPU"].IsVisibleInLegend = false;
 
-                chart1.Series["CPU"].Points.AddXY(chart1.Series["CPU"].Points.Count, cpuUsage);
-                chart2.Series["CPU"].Points.AddXY(chart2.Series["CPU"].Points.Count, memUsage);
-                chart3.Series["CPU"].Points.AddXY(chart3.Series["CPU"].Points.Count, diskwUsage);
-                chart4.Series["CPU"].Points.AddXY(chart4.Series["CPU"].Points.Count, diskrUsage);
+                    chart1.Series["CPU"].Points.AddXY(chart1.Series["CPU"].Points.Count, cpuUsage);
+                    chart2.Series["CPU"].Points.AddXY(chart2.Series["CPU"].Points.Count, memUsage);
+                    chart3.Series["CPU"].Points.AddXY(chart3.Series["CPU"].Points.Count, diskwUsage);
+                    chart4.Series["CPU"].Points.AddXY(chart4.Series["CPU"].Points.Count, diskrUsage);
+                }
             }
         }
         public void SecurityForm()
@@ -608,11 +629,11 @@ namespace RemoteTaskManager
                     item.Selected = true;
 
                 }
-                 listView6.Items.Add(item);
+                listView6.Items.Add(item);
 
             }
             if (selectVPffset > 0 && selectVPffset < listView6.Items.Count)
-                listView6.EnsureVisible(selectVPffset);// savedVerticalScrollPosition ;
+                listView6.EnsureVisible(selectVPffset);
             foreach (ColumnHeader column in listView6.Columns)
             {
                 column.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -796,7 +817,7 @@ namespace RemoteTaskManager
             Properties.Settings.Default.remote_machines = json;
             Properties.Settings.Default.Save();
         }
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private bool OpenRemoteMachineSettings()
         {
             if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
@@ -828,13 +849,18 @@ namespace RemoteTaskManager
                         }
                         else
                         {
-                            return;
+                            return false;
                         }
                         SaveRemoteMachines();
                         break;
                     }
                 }
             }
+            return true;
+        }
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            OpenRemoteMachineSettings();
         }
 
         private void listView2_SelectedIndexChanged(object sender, EventArgs e)
@@ -851,10 +877,7 @@ namespace RemoteTaskManager
             }
         }
 
-        private void toolStripTextBox1_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void toolStripTextBox1_TextChanged(object sender, EventArgs e)
         {
@@ -863,7 +886,7 @@ namespace RemoteTaskManager
             else
                 toolStripButton3.Enabled = false;
         }
-        private void ConnectToSelectedRemoteMachine()
+        private bool ConnectToSelectedRemoteMachine()
         {
             if (listViewRemoteMachines.SelectedItems.Count > 0)
             {
@@ -874,6 +897,8 @@ namespace RemoteTaskManager
                 {
                     if (rm.IP == vmName)
                     {
+                        if (rm.UserName == null || rm.UserName == "")
+                            return false;
                         currentVM.rootUser = rm.UserName;
                         currentVM.rootPassword = rm.Password;
                         break;
@@ -887,16 +912,25 @@ namespace RemoteTaskManager
                 bindingSource1.Add(currentVM);
                 commandQue.Enqueue("connect");
             }
+            return true;
+        }
+        private void ConnectToSelectedRemoteMachineRec()
+        {
+            bool res = ConnectToSelectedRemoteMachine();
+            if (res == false)
+            {
+                // this machine setting has no username
+                if (OpenRemoteMachineSettings() == true)
+                {
+                    ConnectToSelectedRemoteMachineRec();
+                }
+            }
         }
         private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ConnectToSelectedRemoteMachine();
+            ConnectToSelectedRemoteMachineRec();
         }
 
-        private void toolStrip3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void toolStripTextBox3_TextChanged(object sender, EventArgs e)
         {
@@ -952,15 +986,7 @@ namespace RemoteTaskManager
                 processListSort = e.Column.ToString();
         }
 
-        private void toolStripComboBox1_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void toolStripButton5_Click(object sender, EventArgs e)
-        {
-
-        }
         static string InsertLineBreaksEveryNWords(string input, int n)
         {
             // Use regular expressions to split the input into words
@@ -986,15 +1012,19 @@ namespace RemoteTaskManager
         }
         private void toolStripButton7_Click(object sender, EventArgs e)
         {
+            if (currentVM == null || currentVM.machinePS.processes.Count == 0)
+                return;
             string apiKey = Properties.Settings.Default.openai_api_key;
+            string sysMessage = Properties.Settings.Default.openai_system_message;
+            string userPrompt = Properties.Settings.Default.openai_user_prompt;
 
             OpenAIAPI api = new OpenAIAPI(apiKey);
 
             var chat = api.Chat.CreateConversation();
 
             /// give instruction as System
-            chat.AppendSystemMessage("You are an IT system engineer exploring the process list of a machine, and provide your analysis on that machine.");
-
+            // chat.AppendSystemMessage("You are an IT system engineer exploring the process list of a machine, and provide your analysis on that machine.");
+            chat.AppendSystemMessage(sysMessage);
             // give a few examples as user and assistant
             //  chat.AppendUserInput("Is this an animal? Cat");
             //  chat.AppendExampleChatbotOutput("Yes");
@@ -1002,7 +1032,8 @@ namespace RemoteTaskManager
             //  chat.AppendExampleChatbotOutput("No");
 
             // now let's ask it a question'
-            chat.AppendUserInput("What do you think about this process list? do you see any special risk ?");
+            // chat.AppendUserInput("What do you think about this process list? do you see any special risk ?");
+            chat.AppendUserInput(userPrompt);
             foreach (var process in currentVM.machinePS.processes)
             {
                 chat.AppendUserInput("Cmdline: " + process.Cmdline + " Memory: " + process.Memory + " CPU: " + process.CPU);
@@ -1029,8 +1060,8 @@ namespace RemoteTaskManager
                                           //  toolTip1.
 
             response = InsertLineBreaksEveryNWords(response, 10);
-            //toolTip1.SetToolTip(listView4, response);
-            //toolTip1.ShowAlways = true;
+
+
             GPTResponse dlg = new GPTResponse();
             dlg.Show();
             dlg.SetGPTResponse(response);
@@ -1042,33 +1073,18 @@ namespace RemoteTaskManager
             OpenAISettings dlg = new OpenAISettings();
 
             dlg.APIKey = Properties.Settings.Default.openai_api_key;
+            dlg.SysMsg = Properties.Settings.Default.openai_system_message;
+            dlg.Prompt = Properties.Settings.Default.openai_user_prompt;
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Properties.Settings.Default.openai_api_key = dlg.APIKey;
+                Properties.Settings.Default.openai_system_message = dlg.SysMsg;
+                Properties.Settings.Default.openai_user_prompt = dlg.Prompt;
                 Properties.Settings.Default.Save();
             }
         }
 
-        private void startMonitoringToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
         private void Disconnect()
         {
             currentVM = new SingleMachine();
@@ -1076,6 +1092,10 @@ namespace RemoteTaskManager
             this.Invoke(new Action(ServiceListViewForm));
             this.Invoke(new Action(LogEntriesPopulate));
             this.Invoke(new Action(UsersListViewForm));
+            this.Invoke(new Action(PackagesViewForm));
+            this.Invoke(new Action(CronJobsViewForm));
+            this.Invoke(new Action(DisksViewForm));
+            this.Invoke(new Action(NMonListViewForm));
 
             bindingSource1.Clear();
             refreshBindings();
@@ -1092,21 +1112,25 @@ namespace RemoteTaskManager
 
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ConnectToSelectedRemoteMachine();
+            ConnectToSelectedRemoteMachineRec();
         }
 
         private void toolStripButton5_Click_1(object sender, EventArgs e)
         {
-            //  currentVM.ScanVonrabilities();
+            VulnerScan dlg = new VulnerScan();
+            dlg.SetCurrentVM(currentVM);
+            dlg.SetsearchVendor("NIST");
+            dlg.SetVulnersAPIKey("");
+            dlg.ShowDialog();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             CredentialsDlg dlg = new CredentialsDlg();
-            dlg.UserName = "";// remoteMachine.UserName;
-            dlg.Password = "";// remoteMachine.Password;
-            dlg.Port = "22";// remoteMachine.Port.ToString();
+            dlg.UserName = "";
+            dlg.Password = "";
+            dlg.Port = "22";
             dlg.IPFixed = false;
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -1114,7 +1138,7 @@ namespace RemoteTaskManager
                 remoteMachine.IP = dlg.IP;
                 remoteMachine.UserName = dlg.UserName;
                 remoteMachine.Password = dlg.Password;
-                string input = dlg.Port; // Replace with your input string
+                string input = dlg.Port;
                 if (int.TryParse(input, out int result))
                 {
                     remoteMachine.Port = result;
@@ -1134,21 +1158,44 @@ namespace RemoteTaskManager
 
         private void toolStripButton8_Click(object sender, EventArgs e)
         {
-            // currentVM.ScanVonrabilities2();
-            VulnerScan dlg = new VulnerScan();
-            dlg.SetCurrentVM(currentVM);
-            dlg.ShowDialog();
+            if (Properties.Settings.Default.vulners_api_key != null && Properties.Settings.Default.vulners_api_key != "")
+            {
+                // currentVM.ScanVonrabilities2();
+                VulnerScan dlg = new VulnerScan();
+                dlg.SetCurrentVM(currentVM);
+                dlg.SetsearchVendor("Vulners");
+                dlg.SetVulnersAPIKey(Properties.Settings.Default.vulners_api_key);
+                dlg.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("API Key is empty. Please go to options->Set API Key and try again.", "Error");
+            }
 
         }
 
-        private void toolStripTextPackageFilter_Click(object sender, EventArgs e)
-        {
-          
-        }
+
 
         private void toolStripTextPackageFilter_TextChanged(object sender, EventArgs e)
         {
             this.Invoke(new Action(PackagesViewForm));
+        }
+
+        private void vulnerAPIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            APIKeyDlg dlg = new APIKeyDlg();
+            dlg.APIKey = Properties.Settings.Default.vulners_api_key; ;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.vulners_api_key = dlg.APIKey;
+                Properties.Settings.Default.Save();
+            }
+            else
+            {
+                return;
+            }
+
         }
     }
 }

@@ -13,13 +13,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Xml.Schema;
 
 namespace RemoteTaskManager
 {
     public partial class VulnerScan : Form
     {
         SingleMachine currentVM = null;
+        string vulnerAPIKey = "";
+        string searchVendor = "NIST";
         public void SetCurrentVM(SingleMachine current) { currentVM = current; }
+        public void SetVulnersAPIKey(string current) { vulnerAPIKey = current; }
+        public void SetsearchVendor(string current) { searchVendor = current; }
         public VulnerScan()
         {
             InitializeComponent();
@@ -32,18 +37,17 @@ namespace RemoteTaskManager
 
         private void VulnerScan_Load(object sender, EventArgs e)
         {
+            backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.RunWorkerAsync();
 
-
-            //currentVM.ScanVonrabilities2();
         }
         private const string VulnersBaseUrl = "https://vulners.com/api/v3/";
-        public string VulnersAPIKey = "ZP5Z5G6M6W9RJUH9U2KDW2ENT7P4GK3PFI93KYEM9Z9EIROLII5MGUD3W4ES9IAW\"";
 
         public async Task<List<string>> GetPackageVulnerabilitiesAsync2(List<string> packages)
         {
-            List<string> vulnerabilities = new List<string>();
-
+            //   List<string> vulnerabilities = new List<string>();
+            int total = 0;
+            List<string> volns = new List<string>();
             using (var httpClient = new HttpClient())
             {
                 foreach (string package in packages)
@@ -52,8 +56,8 @@ namespace RemoteTaskManager
 
                     var requestData = new
                     {
-                        software = package,
-                        apiKey = VulnersAPIKey
+                        query = package,
+                        apiKey = vulnerAPIKey
                     };
 
                     var response = await httpClient.PostAsJsonAsync(url, requestData);
@@ -64,10 +68,18 @@ namespace RemoteTaskManager
                         dynamic data = JObject.Parse(jsonResponse);
 
                         // Extract vulnerabilities from the JSON response
-                        foreach (var vuln in data["data"][0]["vulnerabilities"])
+                        /*foreach (var vuln in data["data"][0]["vulnerabilities"])
                         {
                             string description = vuln["description"];
                             vulnerabilities.Add(description.ToString());
+                        }*/
+                        if (data["result"] == "error")
+                            break;
+                        if (data != null)
+                        {
+                            total = data["data"]["total"];
+                            // if (total != null)
+                            volns.Add("Total found: " + total.ToString());
                         }
                     }
                     else
@@ -77,11 +89,11 @@ namespace RemoteTaskManager
                 }
             }
 
-            return vulnerabilities;
+            return volns;
         }
 
         private const string NvdBaseUrl = "https://services.nvd.nist.gov/rest/json/cves/2.0";
-
+        private string m_currentPackage = "";
         public async Task<List<string>> GetPackageVulnerabilitiesAsync(List<string> packages)
         {
             List<string> vulnerabilities = new List<string>();
@@ -91,9 +103,9 @@ namespace RemoteTaskManager
                 httpClient.Timeout = TimeSpan.FromSeconds(10);
 
                 //foreach (string package in packages)
-                while (currentIndex + 30 < packages.Count)
+                //    while (currentIndex + 30 < packages.Count)
                 {
-                    string url = $"{NvdBaseUrl}?keywordSearch={string.Join(" ", packages.GetRange(currentIndex, currentIndex + 30))}";
+                    string url = $"{NvdBaseUrl}?keywordSearch={m_currentPackage}";
                     currentIndex += 30;
                     HttpResponseMessage response = new HttpResponseMessage();
                     try
@@ -126,7 +138,7 @@ namespace RemoteTaskManager
             return vulnerabilities;
         }
         public
-        async Task ScanVonrabilitiesTask()
+        async Task<List<string>> ScanVonrabilitiesTask()
         {
             List<string> packages = new List<string> { };
             foreach (var package in currentVM.machineRPM.packages)
@@ -138,39 +150,41 @@ namespace RemoteTaskManager
             {
                 Console.WriteLine(vulnerability);
             }
+            return vulnerabilities;
         }
         public
-        void ScanVonrabilities()
+        List<string> ScanVonrabilities()
         {
+            List<string> packages = new List<string>();
             Task.Run(async () =>
             {
-                await ScanVonrabilitiesTask();
+                packages = await ScanVonrabilitiesTask();
             }).Wait(); // or use .Result
 
+            return packages;
         }
         public
-       async Task ScanVonrabilitiesTask2()
+       async Task<List<string>> ScanVonrabilitiesTask2()
         {
             List<string> packages = new List<string> { };
-            foreach (var package in currentVM.machineRPM.packages)
-                packages.Add(package.Name);
-            List<string> vulnerabilities = await GetPackageVulnerabilitiesAsync2(packages);
 
-            Console.WriteLine("Known vulnerabilities:");
-            foreach (string vulnerability in vulnerabilities)
-            {
-                Console.WriteLine(vulnerability);
-            }
+            packages.Add(m_currentPackage);
+            List<string> vulnerabilities = await GetPackageVulnerabilitiesAsync2(packages);
+            return vulnerabilities;
+            //Console.WriteLine("Known vulnerabilities:");
+
         }
 
         public
-        void ScanVonrabilities2()
+       List<string> ScanVonrabilities2()
         {
+            List<string> vulnerabilities = new List<string>();
             Task.Run(async () =>
             {
-                await ScanVonrabilitiesTask2();
+                vulnerabilities = await ScanVonrabilitiesTask2();
             }).Wait(); // or use .Result
 
+            return vulnerabilities;
         }
         private void NextScan(string str, int current, int count)
         {
@@ -180,7 +194,20 @@ namespace RemoteTaskManager
             scanText.Text += parts[0];
             scanText.Text += Environment.NewLine;
             scanText.SelectionStart = scanText.Text.Length;
+            m_currentPackage = str;
+            List<string> vulnerabilities = new List<string>();
 
+            if (searchVendor == "NIST")
+                vulnerabilities = ScanVonrabilities();
+            else if (searchVendor == "Vulners")
+                vulnerabilities = ScanVonrabilities2();
+
+            foreach (string vulnerability in vulnerabilities)
+            {
+                scanText.Text += vulnerability;
+                scanText.Text += Environment.NewLine;
+
+            }
             // Scroll to the end
             scanText.ScrollToCaret();
             scanText.Refresh();
@@ -193,10 +220,18 @@ namespace RemoteTaskManager
             int curIdx = 0;
             foreach (var package in currentVM.machineRPM.packages)
             {
+                if (backgroundWorker1.CancellationPending)
+                    return;
                 curIdx++;
                 this.Invoke(new Action<string, int, int>(NextScan), package.Name, curIdx, packageCount);
                 Thread.Sleep(200);
             }
+        }
+
+        private void VulnerScan_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            backgroundWorker1.CancelAsync();
+           
         }
     }
 }

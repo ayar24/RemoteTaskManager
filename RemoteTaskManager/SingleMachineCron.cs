@@ -49,6 +49,10 @@ namespace RemoteTaskManager
                     continue;
                 if (line.StartsWith("SHELL"))
                     continue;
+                if (line.StartsWith("PATH"))
+                    continue;
+                if (line.StartsWith("MAIL"))
+                    continue;
 
                 string[] partab = line.Split(new char[] { '\t' }, StringSplitOptions.None);// RemoveEmptyEntries);
 

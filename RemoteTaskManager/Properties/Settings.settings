@@ -26,5 +26,14 @@
     <Setting Name="openai_api_key" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="vulners_api_key" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="openai_system_message" Type="System.String" Scope="User">
+      <Value Profile="(Default)">You are an IT system engineer exploring the process list of a machine, and provide your analysis on that machine.</Value>
+    </Setting>
+    <Setting Name="openai_user_prompt" Type="System.String" Scope="User">
+      <Value Profile="(Default)">What do you think about this process?</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

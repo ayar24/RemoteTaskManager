@@ -153,6 +153,7 @@
             toolStrip5 = new ToolStrip();
             toolStripLabel5 = new ToolStripLabel();
             toolStripTextPackageFilter = new ToolStripTextBox();
+            toolStripSeparator7 = new ToolStripSeparator();
             toolStripButton5 = new ToolStripButton();
             toolStripButton8 = new ToolStripButton();
             listView8 = new ListView();
@@ -258,7 +259,6 @@
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "&File";
-            fileToolStripMenuItem.Click += fileToolStripMenuItem_Click;
             // 
             // toolStripMenuItem1
             // 
@@ -284,7 +284,6 @@
             startMonitoringToolStripMenuItem.Name = "startMonitoringToolStripMenuItem";
             startMonitoringToolStripMenuItem.Size = new Size(179, 26);
             startMonitoringToolStripMenuItem.Text = "Start Capture";
-            startMonitoringToolStripMenuItem.Click += startMonitoringToolStripMenuItem_Click;
             // 
             // stopMonitoringToolStripMenuItem
             // 
@@ -321,6 +320,7 @@
             // 
             // pollingIntervalsToolStripMenuItem
             // 
+            pollingIntervalsToolStripMenuItem.Enabled = false;
             pollingIntervalsToolStripMenuItem.Name = "pollingIntervalsToolStripMenuItem";
             pollingIntervalsToolStripMenuItem.Size = new Size(219, 26);
             pollingIntervalsToolStripMenuItem.Text = "Polling Intervals";
@@ -329,6 +329,7 @@
             // 
             autoConnectToolStripMenuItem.Checked = true;
             autoConnectToolStripMenuItem.CheckState = CheckState.Checked;
+            autoConnectToolStripMenuItem.Enabled = false;
             autoConnectToolStripMenuItem.Name = "autoConnectToolStripMenuItem";
             autoConnectToolStripMenuItem.Size = new Size(219, 26);
             autoConnectToolStripMenuItem.Text = "Auto Connect";
@@ -355,6 +356,7 @@
             vulnerAPIToolStripMenuItem.Name = "vulnerAPIToolStripMenuItem";
             vulnerAPIToolStripMenuItem.Size = new Size(219, 26);
             vulnerAPIToolStripMenuItem.Text = "Vulners API";
+            vulnerAPIToolStripMenuItem.Click += vulnerAPIToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -408,7 +410,6 @@
             toolStripTextBox1.Name = "toolStripTextBox1";
             toolStripTextBox1.Size = new Size(100, 27);
             toolStripTextBox1.ToolTipText = "Enter a valid IP address";
-            toolStripTextBox1.Click += toolStripTextBox1_Click;
             toolStripTextBox1.TextChanged += toolStripTextBox1_TextChanged;
             // 
             // toolStripLabel2
@@ -512,6 +513,7 @@
             listViewRemoteMachines.Size = new Size(263, 154);
             listViewRemoteMachines.StateImageList = imageList1;
             listViewRemoteMachines.TabIndex = 0;
+            toolTip1.SetToolTip(listViewRemoteMachines, "Double click to connect");
             listViewRemoteMachines.UseCompatibleStateImageBehavior = false;
             listViewRemoteMachines.View = View.Details;
             listViewRemoteMachines.SelectedIndexChanged += listView2_SelectedIndexChanged;
@@ -582,7 +584,6 @@
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
-            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             listView1.DoubleClick += listView1_DoubleClick;
             // 
             // columnHeader1
@@ -927,7 +928,6 @@
             toolStrip3.Size = new Size(511, 27);
             toolStrip3.TabIndex = 1;
             toolStrip3.Text = "toolStrip3";
-            toolStrip3.TextChanged += toolStrip3_TextChanged;
             // 
             // toolStripLabel3
             // 
@@ -943,11 +943,12 @@
             // 
             // toolStripButton7
             // 
-            toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton7.Alignment = ToolStripItemAlignment.Right;
+            toolStripButton7.Enabled = false;
             toolStripButton7.Image = (Image)resources.GetObject("toolStripButton7.Image");
             toolStripButton7.ImageTransparentColor = Color.Magenta;
             toolStripButton7.Name = "toolStripButton7";
-            toolStripButton7.Size = new Size(29, 24);
+            toolStripButton7.Size = new Size(86, 24);
             toolStripButton7.Text = "Ask GPT";
             toolStripButton7.Click += toolStripButton7_Click;
             // 
@@ -1219,7 +1220,7 @@
             // toolStrip5
             // 
             toolStrip5.ImageScalingSize = new Size(20, 20);
-            toolStrip5.Items.AddRange(new ToolStripItem[] { toolStripLabel5, toolStripTextPackageFilter, toolStripButton5, toolStripButton8 });
+            toolStrip5.Items.AddRange(new ToolStripItem[] { toolStripLabel5, toolStripTextPackageFilter, toolStripSeparator7, toolStripButton5, toolStripButton8 });
             toolStrip5.Location = new Point(0, 0);
             toolStrip5.Name = "toolStrip5";
             toolStrip5.Size = new Size(517, 27);
@@ -1235,27 +1236,31 @@
             // toolStripTextPackageFilter
             // 
             toolStripTextPackageFilter.Name = "toolStripTextPackageFilter";
-            toolStripTextPackageFilter.Size = new Size(100, 27);
-            toolStripTextPackageFilter.Click += toolStripTextPackageFilter_Click;
+            toolStripTextPackageFilter.Size = new Size(120, 27);
             toolStripTextPackageFilter.TextChanged += toolStripTextPackageFilter_TextChanged;
+            // 
+            // toolStripSeparator7
+            // 
+            toolStripSeparator7.Name = "toolStripSeparator7";
+            toolStripSeparator7.Size = new Size(6, 27);
             // 
             // toolStripButton5
             // 
-            toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton5.Alignment = ToolStripItemAlignment.Right;
             toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
             toolStripButton5.ImageTransparentColor = Color.Magenta;
             toolStripButton5.Name = "toolStripButton5";
-            toolStripButton5.Size = new Size(29, 24);
+            toolStripButton5.Size = new Size(112, 24);
             toolStripButton5.Text = "Search NIST";
             toolStripButton5.Click += toolStripButton5_Click_1;
             // 
             // toolStripButton8
             // 
-            toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton8.Alignment = ToolStripItemAlignment.Right;
             toolStripButton8.Image = (Image)resources.GetObject("toolStripButton8.Image");
             toolStripButton8.ImageTransparentColor = Color.Magenta;
             toolStripButton8.Name = "toolStripButton8";
-            toolStripButton8.Size = new Size(29, 24);
+            toolStripButton8.Size = new Size(129, 24);
             toolStripButton8.Text = "Search Vulners";
             toolStripButton8.Click += toolStripButton8_Click;
             // 
@@ -1418,7 +1423,6 @@
             toolStripComboBox1.Items.AddRange(new object[] { "System Logs", "Syscalls Read/Write", "Auth Logs" });
             toolStripComboBox1.Name = "toolStripComboBox1";
             toolStripComboBox1.Size = new Size(121, 28);
-            toolStripComboBox1.Click += toolStripComboBox1_Click;
             // 
             // tabPage7
             // 
@@ -1552,7 +1556,6 @@
             // 
             toolTip1.IsBalloon = true;
             toolTip1.ShowAlways = true;
-            toolTip1.ToolTipTitle = "Open AI";
             // 
             // RemoteTaskManager
             // 
@@ -1781,5 +1784,6 @@
         private ToolStripButton toolStripButton8;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripMenuItem vulnerAPIToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator7;
     }
 }

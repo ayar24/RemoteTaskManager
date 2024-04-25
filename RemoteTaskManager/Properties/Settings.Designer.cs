@@ -118,5 +118,42 @@ namespace RemoteTaskManager.Properties {
                 this["openai_api_key"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string vulners_api_key {
+            get {
+                return ((string)(this["vulners_api_key"]));
+            }
+            set {
+                this["vulners_api_key"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("You are an IT system engineer exploring the process list of a machine, and provid" +
+            "e your analysis on that machine.")]
+        public string openai_system_message {
+            get {
+                return ((string)(this["openai_system_message"]));
+            }
+            set {
+                this["openai_system_message"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("What do you think about this process?")]
+        public string openai_user_prompt {
+            get {
+                return ((string)(this["openai_user_prompt"]));
+            }
+            set {
+                this["openai_user_prompt"] = value;
+            }
+        }
     }
 }

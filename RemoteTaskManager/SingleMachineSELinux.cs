@@ -21,7 +21,21 @@ namespace RemoteTaskManager
 
             if (timeDifference.TotalMilliseconds > 3000 || lastUpdated == DateTime.MinValue)
             {
-                var command = client.RunCommand("apparmor_status");// -%cpu");// | head -n 100");
+                var command = client.RunCommand("apparmor_status");
+                string psOutput = command.Result;
+                packages = ParseServiceList(psOutput);
+                lastUpdated = DateTime.Now;
+                return true;
+            }
+            return false;
+        }
+        public bool RefreshCentos(SshClient client, string sort, bool asc)
+        {
+            TimeSpan timeDifference = DateTime.Now.Subtract(lastUpdated);
+
+            if (timeDifference.TotalMilliseconds > 3000 || lastUpdated == DateTime.MinValue)
+            {
+                var command = client.RunCommand("sestatus");
                 string psOutput = command.Result;
                 packages = ParseServiceList(psOutput);
                 lastUpdated = DateTime.Now;

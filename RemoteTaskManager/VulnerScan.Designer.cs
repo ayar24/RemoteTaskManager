@@ -82,6 +82,7 @@
             Controls.Add(scanText);
             Name = "VulnerScan";
             Text = "VulnerScan";
+            FormClosing += VulnerScan_FormClosing;
             Load += VulnerScan_Load;
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();

@@ -27,13 +27,27 @@ namespace RemoteTaskManager
             {
                 var command = client.RunCommand("apt list");// -%cpu");// | head -n 100");
                 string psOutput = command.Result;
-                packages = ParseServiceList(psOutput);
+                packages = ParseServiceList(psOutput,' ');
                 lastUpdated = DateTime.Now;
                 return true;
             }
             return false;
         }
-        private List<PackageInfo> ParseServiceList(string output)
+        public bool RefreshCentos(SshClient client, string sort, bool asc)
+        {
+            TimeSpan timeDifference = DateTime.Now.Subtract(lastUpdated);
+
+            if (timeDifference.TotalMilliseconds > 3000 || lastUpdated == DateTime.MinValue)
+            {
+                var command = client.RunCommand("rpm -qa");// -%cpu");// | head -n 100");
+                string psOutput = command.Result;
+                packages = ParseServiceList(psOutput, '\n');
+                lastUpdated = DateTime.Now;
+                return true;
+            }
+            return false;
+        }
+        private List<PackageInfo> ParseServiceList(string output, char delim)
         {
             List<PackageInfo> services = new List<PackageInfo>();
 
@@ -41,10 +55,22 @@ namespace RemoteTaskManager
 
             foreach (string line in lines.Skip(1)) // Skip the header line
             {
-                string[] parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] parts = line.Split(new char[] { delim }, StringSplitOptions.RemoveEmptyEntries);
 
-                
-                if (parts.Length >= 5)
+                if (parts.Length == 1)
+                {
+                    PackageInfo service = new PackageInfo
+                    {
+                        Name = parts[0],
+                        Enabled = "",
+                        State = "",
+                        RunState = "",
+                        Description = ""
+                    };
+
+                    services.Add(service);
+                } 
+                else if (parts.Length >= 5)
                 {
                     string finalName = parts[0];
                     string[] packageName = parts[0].Split('/', StringSplitOptions.None);
@@ -65,7 +91,7 @@ namespace RemoteTaskManager
 
                     services.Add(service);
                 }
-                else if (parts.Length >= 3)
+               /* else if (parts.Length >= 3)
                 {
                     string finalName = parts[0];
                     string[] packageName = parts[0].Split('/', StringSplitOptions.None);
@@ -83,7 +109,7 @@ namespace RemoteTaskManager
                     };
                
                     services.Add(service);
-                }
+                }*/
             }
 
             return services;

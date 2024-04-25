@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -105,6 +106,27 @@ namespace RemoteTaskManager
         private void okButton_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // open url
+            string url = "https://internixsystems.com";
+
+            // Open the URL in the default web browser
+            try
+            {
+                // Open the URL in the default web browser
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error opening URL: " + ex.Message);
+            }
         }
     }
 }

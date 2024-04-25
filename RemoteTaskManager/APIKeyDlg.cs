@@ -10,14 +10,10 @@ using System.Windows.Forms;
 
 namespace RemoteTaskManager
 {
-
-    public partial class OpenAISettings : Form
+    public partial class APIKeyDlg : Form
     {
         public string APIKey { get; set; } = "";
-        public string SysMsg { get; set; } = "";
-        public string Prompt { get; set; } = "";
-
-        public OpenAISettings()
+        public APIKeyDlg()
         {
             InitializeComponent();
         }
@@ -25,21 +21,11 @@ namespace RemoteTaskManager
         private void button2_Click(object sender, EventArgs e)
         {
             APIKey = textBox1.Text;
-            SysMsg = textBox2.Text;
-            Prompt = textBox3.Text;
-            Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void OpenAISettings_Load(object sender, EventArgs e)
+        private void APIKeyDlg_Load(object sender, EventArgs e)
         {
             textBox1.Text = APIKey;
-            textBox2.Text = SysMsg;
-            textBox3.Text = Prompt;
         }
     }
 }

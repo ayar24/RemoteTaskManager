@@ -55,6 +55,9 @@ namespace RemoteTaskManager
         public bool canOpenTerminal { get; set; }
         public bool canCanOpenCockpit { get; set; }
         public bool canDisconnect { get; set; }
+        public bool isUbunto { get; set; }
+        public bool isCentOs { get; set; }
+        public bool isWindows { get; set; }
 
         public SingleMachineRPM machineRPM;
         public SingleMachineNMon machineNMON;
@@ -78,6 +81,8 @@ namespace RemoteTaskManager
         }
         public bool RefreshRPMList(string sort, bool asc)
         {
+            if (isCentOs)
+                return machineRPM.RefreshCentos(gClient, sort, asc);
             return machineRPM.Refresh(gClient, sort, asc);
         }
         public bool RefreshCronList(string sort, bool asc)
@@ -90,6 +95,8 @@ namespace RemoteTaskManager
         }
         public bool RefreshSELinux(string sort, bool asc)
         {
+            if (isCentOs)
+                return machineSELinux.RefreshCentos(gClient, sort, asc);
             return machineSELinux.Refresh(gClient, sort, asc);
         }
         public bool RefreshNMonList(string sort, bool asc)
@@ -123,18 +130,41 @@ namespace RemoteTaskManager
         public bool GetLogEntries(int logID)
         {
             string logFile = "";
-            if (logID == 1)
-            {
-                return false;// logMessages.GeteBPFOutput(gClient);
-            } else if (logID == 0)
-            {
-                logFile = "/var/log/syslog";
-                return logMessages.GetLogEntries(gClient, logFile);
 
-            } else if (logID == 2)
+            if (isUbunto)
             {
-                logFile = "/var/log/auth.log";
-                return logMessages.GetLogEntries(gClient, logFile);
+                if (logID == 1)
+                {
+                    return false;// logMessages.GeteBPFOutput(gClient);
+                }
+                else if (logID == 0)
+                {
+                    logFile = "/var/log/syslog";
+                    return logMessages.GetLogEntries(gClient, logFile);
+
+                }
+                else if (logID == 2)
+                {
+                    logFile = "/var/log/auth.log";
+                    return logMessages.GetLogEntries(gClient, logFile);
+                }
+            } else if (isCentOs)
+            {
+                if (logID == 1)
+                {
+                    return false;// logMessages.GeteBPFOutput(gClient);
+                }
+                else if (logID == 0)
+                {
+                    logFile = "/var/log/messages";
+                    return logMessages.GetLogEntries(gClient, logFile);
+
+                }
+                else if (logID == 2)
+                {
+                    logFile = "/var/log/secure";
+                    return logMessages.GetLogEntries(gClient, logFile);
+                }
             }
             return false;
         }
@@ -267,7 +297,7 @@ namespace RemoteTaskManager
                 try
                 {
                     gClient.ConnectionInfo.Timeout = TimeSpan.FromMilliseconds(2000);
-                    bool isWindows = false;
+                    bool bIsWindows = false;
                     gClient.Connect();
 
                     if (gClient.IsConnected)
@@ -279,7 +309,7 @@ namespace RemoteTaskManager
 
                         if (gClient.ConnectionInfo.ServerVersion.Contains("Windows"))
                         {
-                            isWindows = true;
+                            bIsWindows = true;
                             osVersionCommand = "systeminfo | findstr /B /C:\"OS Name\" /C:\"OS Version\"";
                             kernelVersionCommand = "uname -r";
                             totalRamCommand = "wmic memorychip get capacity";
@@ -295,13 +325,16 @@ namespace RemoteTaskManager
                         cpuInfo = cpuInfo.TrimStart();
                         totalRam = totalRam.Replace("\r\n", "");
                         totalRam = totalRam.Replace("\n", "");
-                        if (isWindows)
+                        if (bIsWindows)
                         {
                             osVersion = osVersion.Split("\r")[0].Split(":")[1];
                             osVersion = osVersion.TrimStart();
                             cpuInfo = (cpuInfo.Split("\r\n"))[0].Split("=")[1];
                             totalRam = totalRam.Split("\r")[1];
+                            this.isWindows = true;
                         }
+                        else
+                            this.isWindows = false;
                         Console.WriteLine("OS Version: " + osVersion);
                         Console.WriteLine("Kernel Version: " + kernelVersion);
                         Console.WriteLine("Total RAM (MB): " + totalRam);
@@ -316,6 +349,16 @@ namespace RemoteTaskManager
                         res = true;
                         statusMessage = "Connected.";
                         canDisconnect = true;
+
+                        isCentOs = false;
+                        isUbunto = false;
+                        if (osVersion.Contains("Ubunto"))
+                            isUbunto = true;
+                        if (osVersion.Contains("Red Hat"))
+                            isCentOs = true;
+                        if (osVersion.Contains("Oracle"))
+                            isCentOs = true;
+
                     }
                 }
                 catch (Exception ex)

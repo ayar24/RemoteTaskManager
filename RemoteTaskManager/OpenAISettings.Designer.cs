@@ -40,7 +40,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(242, 277);
+            button1.Location = new Point(288, 353);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 0;
@@ -61,13 +61,13 @@
             // 
             textBox1.Location = new Point(12, 45);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(324, 27);
+            textBox1.Size = new Size(370, 27);
             textBox1.TabIndex = 2;
             // 
             // button2
             // 
             button2.DialogResult = DialogResult.OK;
-            button2.Location = new Point(142, 277);
+            button2.Location = new Point(188, 353);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 3;
@@ -77,10 +77,10 @@
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(12, 104);
+            textBox2.Location = new Point(12, 101);
             textBox2.Multiline = true;
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(324, 57);
+            textBox2.Size = new Size(370, 106);
             textBox2.TabIndex = 5;
             // 
             // label2
@@ -94,16 +94,16 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(12, 193);
+            textBox3.Location = new Point(12, 233);
             textBox3.Multiline = true;
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(324, 57);
+            textBox3.Size = new Size(370, 105);
             textBox3.TabIndex = 7;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 167);
+            label3.Location = new Point(12, 210);
             label3.Name = "label3";
             label3.Size = new Size(79, 20);
             label3.TabIndex = 6;
@@ -115,7 +115,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button1;
-            ClientSize = new Size(355, 318);
+            ClientSize = new Size(394, 394);
             Controls.Add(textBox3);
             Controls.Add(label3);
             Controls.Add(textBox2);
@@ -124,6 +124,7 @@
             Controls.Add(textBox1);
             Controls.Add(label1);
             Controls.Add(button1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "OpenAISettings";
             Text = "OpenAI Settings";
             Load += OpenAISettings_Load;
