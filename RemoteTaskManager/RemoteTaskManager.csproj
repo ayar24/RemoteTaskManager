@@ -8,11 +8,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>RemoteTaskManager.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Title>Remote Task Manager</Title>
+    <Title>Linux Task Manager</Title>
     <Company>Internix Systems</Company>
-    <Description>Remote Task Manager is an application intented to assist system administrators to manage remote machines</Description>
+    <Description>Linux Task Manager is an application intented to assist system administrators to manage remote machines</Description>
     <Copyright>Copyright 2024 Internix Systems</Copyright>
-    <Product>Remote Task Manager</Product>
+    <Product>Linux Task Manager</Product>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
 	<RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
 	<PlatformTarget>AnyCPU</PlatformTarget>
