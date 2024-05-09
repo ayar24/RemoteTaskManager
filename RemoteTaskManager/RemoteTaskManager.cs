@@ -786,7 +786,7 @@ namespace RemoteTaskManager
         private void defaultCredentialsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CredentialsDlg dlg = new CredentialsDlg();
-
+            dlg.IP = "None";
             dlg.UserName = Properties.Settings.Default.default_user_name;
             dlg.Password = Properties.Settings.Default.default_root_pw;
             dlg.Port = Properties.Settings.Default.default_port;

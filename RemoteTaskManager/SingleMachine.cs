@@ -352,7 +352,7 @@ namespace RemoteTaskManager
 
                         isCentOs = false;
                         isUbunto = false;
-                        if (osVersion.Contains("Ubunto"))
+                        if (osVersion.Contains("Ubuntu"))
                             isUbunto = true;
                         if (osVersion.Contains("Red Hat"))
                             isCentOs = true;

@@ -53,6 +53,13 @@ namespace RemoteTaskManager
             textBox2.Text = Password;
             textBox3.Text = Port;
             textBoxIP.Text = IP;
+            if (IP == "None")
+            {
+                textBoxIP.Visible = false;textBox3.Visible = false;
+                textBoxIP.ReadOnly = true;textBox3.ReadOnly = true;
+                labelIP.Visible = false;
+                labelPort.Visible = false;
+            }
         }
 
         private void checkBoxShowPassword_CheckedChanged(object sender, EventArgs e)
