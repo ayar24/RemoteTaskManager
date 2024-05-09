@@ -130,7 +130,7 @@ jobs:
         $appId = "9NP4RZZFLC17"
         # Create submission package
         New-StoreBrokerConfigFile -Path .\submission.json -AppId 9PNR1H0WT6RW
-        New-SubmissionPackage -ConfigPath .\submission.json -AppxPath ${{ env.Wap_Project_Directory }}\AppPackages\Package_1.0.34.0_AnyCPU_bundle.msixupload -OutPath out -OutName package
+        New-SubmissionPackage -ConfigPath .\submission.json -AppxPath ${{ env.Wap_Project_Directory }}\AppPackages\Package_1.0.36.0_AnyCPU_bundle.msixupload -OutPath out -OutName package
         # Create new submission
         $sub = New-ApplicationSubmission -AppId $appId -Force
         # Parse submission meta
