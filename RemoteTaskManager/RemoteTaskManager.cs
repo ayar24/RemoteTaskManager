@@ -12,6 +12,9 @@ using OpenAI_API;
 using System.Text;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Linq;
+using Windows.Services.Store;
+
+//using Windows.UI.Xaml.Controls;
 
 namespace RemoteTaskManager
 {
@@ -23,8 +26,9 @@ namespace RemoteTaskManager
         RemoteMachineList remoteMachines;
         string processListSort = "";
         bool processListSortOrder = false;
-
-        public RemoteTaskManager()
+		private StoreContext context = null;
+		private StoreAppLicense appLicense = null;
+		public RemoteTaskManager()
         {
             InitializeComponent();
         }
@@ -37,8 +41,62 @@ namespace RemoteTaskManager
             DisconnectAndClose();
         }
 
+		// Call this while your app is initializing.
+		private async void InitializeLicense()
+		{
+			if (context == null)
+			{
+				context = StoreContext.GetDefault();
+				// If your app is a desktop app that uses the Desktop Bridge, you
+				// may need additional code to configure the StoreContext object.
+				// For more info, see https://aka.ms/storecontext-for-desktop.
 
-        private void PopulateListViewWithHyperVMachines()
+				//var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this.Handle);
+				// Initialize the dialog using wrapper funcion for IInitializeWithWindow
+				WinRT.Interop.InitializeWithWindow.Initialize(context, this.Handle);
+			}
+
+			//workingProgressRing.IsActive = true;
+			appLicense = await context.GetAppLicenseAsync();
+			//workingProgressRing.IsActive = false;
+			if (appLicense.IsActive)
+			{
+				if (appLicense.IsTrial)
+				{
+					this.Text = $"This is the trial version. Expiration date: {appLicense.ExpirationDate}";
+
+					// Show the features that are available during trial only.
+				}
+				else
+				{
+					// Show the features that are available only with a full license.
+				}
+			}
+			// Register for the licenced changed event.
+			context.OfflineLicensesChanged += context_OfflineLicensesChanged;
+		}
+		private async void context_OfflineLicensesChanged(StoreContext sender, object args)
+		{
+			// Reload the license.
+			//workingProgressRing.IsActive = true;
+			appLicense = await context.GetAppLicenseAsync();
+			//workingProgressRing.IsActive = false;
+
+			if (appLicense.IsActive)
+			{
+				if (appLicense.IsTrial)
+				{
+					this.Text = $"This is the trial version. Expiration date: {appLicense.ExpirationDate}";
+
+					// Show the features that are available during trial only.
+				}
+				else
+				{
+					// Show the features that are available only with a full license.
+				}
+			}
+		}
+		private void PopulateListViewWithHyperVMachines()
         {
             string savedSel = "";
             if (listView1.SelectedItems.Count > 0)
@@ -73,7 +131,9 @@ namespace RemoteTaskManager
 
         private void RemoteTaskManager_Load(object sender, EventArgs e)
         {
-            chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
+            InitializeLicense();
+
+			chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             chart2.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             chart3.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             chart4.ChartAreas[0].AxisX.MajorGrid.Enabled = false;

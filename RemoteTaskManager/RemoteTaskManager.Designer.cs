@@ -1,4 +1,5 @@
-﻿namespace RemoteTaskManager
+﻿
+namespace RemoteTaskManager
 {
     partial class RemoteTaskManager
     {

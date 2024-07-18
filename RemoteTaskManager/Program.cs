@@ -1,3 +1,4 @@
+
 namespace RemoteTaskManager
 {
     internal static class Program
@@ -13,5 +14,7 @@ namespace RemoteTaskManager
             ApplicationConfiguration.Initialize();
             Application.Run(new RemoteTaskManager());
         }
+
+
     }
 }
